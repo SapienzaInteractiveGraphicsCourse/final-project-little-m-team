@@ -1,5 +1,8 @@
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/build/three.module.js';
-
 window.onload = function init(){
     canvas = document.getElementById("gl-canvas");
+    const renderer = new THREE.WebGLRenderer({canvas});
+
+    aspect = canvas.width/canvas.height;
+    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+
 }
