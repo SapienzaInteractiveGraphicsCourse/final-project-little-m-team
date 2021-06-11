@@ -4,5 +4,4 @@ window.onload = function init(){
 
     aspect = canvas.width/canvas.height;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-
 }
