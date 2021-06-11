@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 window.onload = function init(){
     canvas = document.getElementById("gl-canvas");
     const renderer = new THREE.WebGLRenderer({canvas});
