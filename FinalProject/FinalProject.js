@@ -1,4 +1,6 @@
-import * as THREE from 'three';
+import * as THREE from '../resources/three/build/three.js';
+
+import { OrbitControls } from '../Resources/three/examples/jsm/controls/OrbitControls.js';
 
 window.onload = function init(){
     const canvas = document.getElementById("gl-canvas");
