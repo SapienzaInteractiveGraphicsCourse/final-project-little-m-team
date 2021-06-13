@@ -1,6 +1,9 @@
-import * as THREE from '../resources/three/build/three.js';
+import * as THREE from '../resources/three/build/three.module.js';
 
-import { OrbitControls } from '../Resources/three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
+import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
+import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
+
 
 window.onload = function init(){
     const canvas = document.getElementById("gl-canvas");
@@ -8,10 +11,10 @@ window.onload = function init(){
 
     aspect = canvas.width/canvas.height;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.z = 20;
+    camera.position.z = 2;
 
-    const controls = new THREE.OrbitControls(camera, canvas);
-
+    const controls = new OrbitControls(camera, canvas);
+    controls.update();
     const scene = new THREE.Scene();
 
     const boxWidth = 1;
@@ -23,7 +26,11 @@ window.onload = function init(){
 
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-
-    renderer.render(scene, camera);
-    controls.update();
+    animate()
+    function animate() {
+    	requestAnimationFrame( animate );
+    	// required if controls.enableDamping or controls.autoRotate are set to true
+    	controls.update();
+    	renderer.render( scene, camera );
+    }
 }
