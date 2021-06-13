@@ -17,23 +17,27 @@ window.onload = function init(){
     const controls = new OrbitControls(camera, canvas);
     controls.update();
     const scene = new THREE.Scene();
-
+/*
     const boxWidth = 1;
     const boxHeight = 1;
     const boxDepth = 1;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
     const material = new THREE.MeshBasicMaterial({color: 0x44aa88});  // greenish blue
-
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-    animate()
+*/
+    THREE.Cache.enabled = true;
+    const loader = new THREE.ObjectLoader();
+    loader.load(('../resources/scene.json'), function ( data ) {
+        scene.add(data);
+	},);
+    animate();
     function animate() {
-    	requestAnimationFrame( animate );
-    	// required if controls.enableDamping or controls.autoRotate are set to true
-    	controls.update();
-    	renderer.render( scene, camera );
+        requestAnimationFrame( animate );
+        // required if controls.enableDamping or controls.autoRotate are set to true
+        controls.update();
+        renderer.render( scene, camera );
     }
 
-    const loader = new THREE.ObjectLoader();
 }
