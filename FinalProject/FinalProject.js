@@ -2,6 +2,7 @@ import * as THREE from '../resources/three/build/three.module.js';
 
 import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
+//import {ObjectLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 
 
@@ -33,4 +34,6 @@ window.onload = function init(){
     	controls.update();
     	renderer.render( scene, camera );
     }
+
+    const loader = new THREE.ObjectLoader();
 }
