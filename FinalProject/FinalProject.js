@@ -28,7 +28,7 @@ window.onload = function init(){
 	},);
 */
 //  GEOMETRY:
-    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const sphereGeometry = new THREE.SphereGeometry(1, 6, 6);
 
 // PLANETARY SYSTEM:
     const planetSystem = new THREE.Object3D();
@@ -43,7 +43,7 @@ window.onload = function init(){
     const planetMaterial = new THREE.MeshToonMaterial({color: 0x646464});
     const planetMesh = new THREE.Mesh(sphereGeometry, planetMaterial);
     planetMesh.receiveShadow = true;
-
+    planetMesh.position.y = 5;
     planet.add(planetMesh);
     objects.push(planetMesh);
 
@@ -76,7 +76,7 @@ window.onload = function init(){
     greenStar.add(greenStarMesh);
     greenStar.add(greenLight);
     objects.push(greenStar);
-
+    console.log(objects)
     render();
 
     function render(time) {
@@ -86,6 +86,12 @@ window.onload = function init(){
             camera.updateProjectionMatrix();
         }
         controls.update();
+/*        objects.forEach((obj) => {
+            obj.rotation.y = time/1000;
+        });
+*/
+        stars.rotation.y = time/1000;
+        planet.rotation.z = time/1000;
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     }
