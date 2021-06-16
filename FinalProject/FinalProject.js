@@ -15,13 +15,20 @@ class ShipController {
     constructor(shipObject) {
         this.ship = shipObject.getObjectByName("shipCam");
         this.light = shipObject.getObjectByName("shipLight");
-        this.speed = 0;
+        this.gear = 4;
+        this.speed = [-0.2, -0.1, -0.05, -0.01, 0, 0.01, 0.05, 0.1, 0.2];
         this.incline = 0;
         this.flip = 0;
-
-        this.forward = shipObject.getWorldDirection();
         this.engine = false;
         this.light.intensity = 0;
+
+        this.forward = new THREE.Vector3();
+        shipObject.getWorldDirection(this.forward);
+        this.forward = this.forward.normalize();
+
+        let x = this.forward.clone();
+        x.cross(this.ship.up);
+        this.cross = x.normalize();
 
         this.controls = {
             'speedUp': 38,      // UpArrow
@@ -32,43 +39,47 @@ class ShipController {
             'inclineUp': 87,    // W
             'inclineDown': 83,  // S
             'flipLeft': 65,     // A
-            'flip Riight': 68,  // D
+            'flipRight': 68,    // D
             'engine': 16,       //ShiftRight
+            'reset': 8,
         };
 
         window.addEventListener('keydown', (e) => {
             switch(e.keyCode){
                 case (this.controls['speedUp']):
-                    if (this.engine && this.speed <0.2) this.speed += 0.05;
-                    console.log(this.speed);
+                    if (this.engine && this.speed[this.gear] < 0.2) this.gear +=1;
+                    console.log(this.speed[this.gear]);
                 break;
                 case (this.controls['speedDown']):
-                    if (this.engine && this.speed >-0.2) this.speed -= 0.05;
-                    console.log(this.speed);
+                    if (this.engine && this.gear > 0) this.gear --;
+                    console.log(this.speed[this.gear]);
                 break;
                 case (this.controls['inclineUp']):
-                    this.incline += 1;
-                    console.log(this.incline);
+                    this.incline = 0.02;
+                    this.update();
                 break;
                 case (this.controls['inclineDown']):
-                    this.incline -= 1;
-                    console.log(this.incline);
+                    this.incline = -0.02;
+                    this.update();
                 break;
 
                 case (this.controls['flipLeft']):
-                    this.flip -= 1;
-                    console.log(this.flip);
+                    this.flip = -0.05;
+                    this.update();
+
                 break;
                 case (this.controls['flipRight']):
-                    this.flip +=1;
-                    console.log(this.flip);
+                    this.flip = 0.05;
+                    this.update();
                 break;
                 case this.controls['engine']:
                     this.engine = !this.engine;
-                    this.speed = 0;
+                    this.gear = 4;
                     this.light.intensity = this.engine;
                     console.log(this.engine);
                 break;
+                case this.controls['reset']:
+                    this.ship.lookAt(0,0,0);
                 default:
                     console.log(e.keyCode);
             }
@@ -78,9 +89,13 @@ class ShipController {
 
     update(){
         if (this.engine){
-            this.light.intensity = 1 + Math.abs(this.speed)*10;
-            this.ship.translateOnAxis(this.forward.normalize(), this.speed);
+            this.light.intensity = (1 + Math.abs(this.speed[this.gear])*10);
+            this.ship.translateOnAxis(this.forward, this.speed[this.gear]);
         }
+        this.ship.rotateOnAxis(this.forward, this.flip);
+        this.ship.rotateOnAxis(this.cross, this.incline);
+        this.flip = 0;
+        this.incline = 0;
     }
 
 };
@@ -99,10 +114,7 @@ function init(scene){
     const camera = scene.getObjectByName("shipCam");
     camera.position.set(0,0,15);
     camera.lookAt(0,0,0);
-    const controls = new OrbitControls(camera, canvas);
-    controls.update();
     const controller = new ShipController(camera);
-    console.log(controller.ship)
     modifyScene();
 
 
@@ -121,8 +133,7 @@ function init(scene){
             camera.updateProjectionMatrix();
         }
         orbits(time*0.001);
-        controller.update()
-        controls.update();
+        controller.update();
         renderer.render(scene, camera);
 
         requestAnimationFrame(render);
