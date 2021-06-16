@@ -120,7 +120,7 @@ function init(scene){
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
         }
-        //orbits(time*0.001);
+        orbits(time*0.001);
         controller.update()
         controls.update();
         renderer.render(scene, camera);
