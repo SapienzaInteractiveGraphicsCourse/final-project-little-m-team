@@ -55,22 +55,18 @@ class ShipController {
                     console.log(this.speed[this.gear]);
                 break;
                 case (this.controls['inclineUp']):
-                    this.incline = 0.02;
-                    this.update();
+                    this.ship.rotateOnAxis(this.cross, 0.02);
                 break;
                 case (this.controls['inclineDown']):
-                    this.incline = -0.02;
-                    this.update();
+                    this.ship.rotateOnAxis(this.cross, -0.02);
                 break;
 
                 case (this.controls['flipLeft']):
-                    this.flip = -0.05;
-                    this.update();
+                    this.ship.rotateOnAxis(this.forward, -0.05);
 
                 break;
                 case (this.controls['flipRight']):
-                    this.flip = 0.05;
-                    this.update();
+                    this.ship.rotateOnAxis(this.forward, 0.05);
                 break;
                 case this.controls['engine']:
                     this.engine = !this.engine;
@@ -92,10 +88,6 @@ class ShipController {
             this.light.intensity = (1 + Math.abs(this.speed[this.gear])*10);
             this.ship.translateOnAxis(this.forward, this.speed[this.gear]);
         }
-        this.ship.rotateOnAxis(this.forward, this.flip);
-        this.ship.rotateOnAxis(this.cross, this.incline);
-        this.flip = 0;
-        this.incline = 0;
     }
 
 };
@@ -112,7 +104,7 @@ function init(scene){
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     const camera = scene.getObjectByName("shipCam");
-    camera.position.set(0,0,15);
+    camera.position.set(0,0,40);
     camera.lookAt(0,0,0);
     const controller = new ShipController(camera);
     modifyScene();
@@ -121,6 +113,7 @@ function init(scene){
     function modifyScene(){
         scene.getObjectByName("greenLight").intensity = 500;
         scene.getObjectByName("redLight").intensity = 500;
+        scene.getObjectByName("ZigarovPlanet").scale.set(10,10,10);
 
     }
 
