@@ -4,17 +4,16 @@ import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js'
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 
 function loadScene(){
-    THREE.Cache.enabled = true;
+    THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('../resources/scenes/newScene.json'), function (scene) {init(scene)});
+    loader.load(('../resources/scenes/newScenee.json'), function (scene) {init(scene)});
 }
 
 window.onload = loadScene();
 
     class Player {
         constructor(shipObject) {
-            this.model = shipObject.getObjectByName("Ship");
-            console.log(this.model.position.set(0,0,-2));
+            this.model = shipObject;
             this.cam =  shipObject.getObjectByName("shipCam");
             this.lights = shipObject.getObjectByName("shipLights");
             this.lights.children[1].visible = true;
@@ -72,10 +71,10 @@ window.onload = loadScene();
                         }
                     break;
                     case (this.controls['inclineUp']):
-                        if (this.engine) this.cam.rotateOnWorldAxis(this.w,0.02);
+                        if (this.engine) this.model.rotateX(-0.02);
                     break;
                     case (this.controls['inclineDown']):
-                        if (this.engine) this.cam.rotateOnWorldAxis(this.w,-0.02);
+                        if (this.engine) this.model.rotateX(0.02);
                     break;
 
                     case (this.controls['flipLeft']):
@@ -180,7 +179,7 @@ function init(scene){
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-    const ship = new Player(scene.getObjectByName("shipCam"));
+    const ship = new Player(scene.getObjectByName("Ship"));
     console.log(ship.model);
     const camera = ship.cam;
     const lights = [scene.getObjectByName("star1Light"), scene.getObjectByName("star2Light")];
