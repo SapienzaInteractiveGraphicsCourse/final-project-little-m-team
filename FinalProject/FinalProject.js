@@ -78,10 +78,10 @@ window.onload = loadScene();
                     break;
 
                     case (this.controls['flipLeft']):
-                        if (this.engine) this.cam.rotateOnWorldAxis(this.fw,-0.05);
+                        if (this.engine) this.model.rotateZ(0.05);
                     break;
                     case (this.controls['flipRight']):
-                        if (this.engine) this.cam.rotateOnWorldAxis(this.fw,0.05);
+                        if (this.engine) this.cam.rotateZ(-0.05);
                     break;
                     case this.controls['engine']:
                         this.engine = !this.engine;
