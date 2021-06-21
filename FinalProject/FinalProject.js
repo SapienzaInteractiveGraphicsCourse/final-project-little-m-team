@@ -36,26 +36,8 @@ window.onload = loadScene();
 
             this.collision = false;
             this.landing = false;
+        }
 
-            this.setUp();
-        }
-        ssEngine(){
-            this.engine = !this.engine;
-            this.gear = 4;
-            this.lights.children[1].intensity = this.engine;
-        }
-        shiftUp(){
-            if (this.engine && this.gear < 8) {
-                this.gear +=1;
-                this.lights.children[1].intensity += (2)*Math.sign(this.speed[this.gear]);
-            }
-        }
-        shiftDown(){
-            if (this.engine && this.gear > 0) {
-                this.gear -=1;
-                this.lights.children[1].intensity -= 2*Math.sign(this.speed[this.gear]);
-            }
-        }
         updateAxis() {
             var front = new THREE.Vector3();
             var back = new THREE.Vector3();
@@ -73,104 +55,103 @@ window.onload = loadScene();
             this.ray.set(front,this.fw);
         }
         checkCollision(cast){
-            if((typeof cast !== 'undefined')&&(cast.distance <2)){
+            if((typeof cast !== 'undefined')&&(cast.distance <2)&&(!this.collision)){
                 console.log("Collision Detected");
                 this.collision = true;
-                this.gear = 4;
+                this.ssEngine();
+                this.ssEngine();
             }
-        }
-        get distance(){
-            var p = new THREE.Vector3();
-            p = this.model.getWorldPosition(p);
-            console.log(p.length());
-            return p.length();
+            else if((typeof cast !== 'undefined')&&(cast.distance >2)&&(this.collision)){
+                this.collision = false;
+            }
         }
 
         land() {
-            this.gear = 4;                  // speed = 0;
-            var p = new THREE.Vector3();
-            this.model.getWorldPosition(p);
-            const phi = p.angleTo(this.u)
-            this.model.rotateOnWorldAxis(this.w,phi);
-            this.model.getWorldPosition(p);
-            const d = this.distance - 10;
-            console.log(phi,d);
-            this.model.translateOnAxis(this.u.negate(),d);
+            if (this.engine) {
+                if (this.landed){
+                    this.model.translateOnAxis(this.u,2);
+                    this.landed = false;
+                }
 
-            this.landing = false;
+                else{
+                    var p = new THREE.Vector3();
+                    this.model.getWorldPosition(p);
+                    const d = p.length() - 10;
+
+                    if (d<3){
+                        const phi = p.angleTo(this.u);
+                        this.model.rotateOnWorldAxis(this.w,phi);
+                        this.model.translateOnAxis(this.u.negate(),d);
+                        this.ssEngine();
+                        this.landed = true;
+                    }
+                    else console.log("Too far for landing: ",d);
+                }
+            }
         }
 
+
         update(cast){
-                if (!this.collision) this.checkCollision(cast);
+                this.checkCollision(cast);
                 this.model.translateY(-this.speed[this.gear]);
 
                 if (this.landing) this.land();
                 this.updateAxis();
 
         }
-        roll(theta){}
-        pitch(phi){}
+
+        ssEngine(){
+            this.engine = !this.engine;
+            console.log("Engine On: ",this.engine);
+            this.gear = 4;
+            this.lights.children[1].intensity = this.engine;
+        }
+        shiftUp(){
+            if (this.engine && this.gear < 8 && !this.landed) {
+                this.gear +=1;
+                this.lights.children[1].intensity += (2)*Math.sign(this.speed[this.gear]);
+            }
+        }
+        shiftDown(){
+            if (this.engine && this.gear > 0 && !this.landed) {
+                this.gear -=1;
+                this.lights.children[1].intensity -= 2*Math.sign(this.speed[this.gear]);
+            }
+        }
+        roll(theta){
+            if (!this.landed) this.model.rotateY(theta);
+        }
+        pitch(phi){
+            if (!this.landed) this.model.rotateX(phi);
+        }
         dodge(theta){}
         reset(){}
 
         setUp(){
-            const controls = {
-                16: this.ssEngine(),    // Shift
-                38: this.shiftUp(),     // Up Arrow
-                40: this.shiftDown(),   // Down Arrow
-
-                87: this.pitch(-0.05),  //
-                83: this.pitch(0.05),
-
-                65: this.roll(0.1),
-                68: this.roll(-0.1),
-
-                37: this.dodge(-90),
-                39: this.dodge(90),
-
-                81: this.land(),
-
-                8: this.reset()
-            }
             window.addEventListener('keydown', (e) => {
                 switch(e.keyCode){
-                    case (this.controls['speedUp']):
-
+                    case 16: this.ssEngine();    // Shift
                     break;
-                    case (this.controls['speedDown']):
+                    case 38: this.shiftUp();     // Up Arrow
                     break;
-                    case (this.controls['inclineUp']):
-                        if (this.engine) this.model.rotateX(-0.1);
+                    case 40: this.shiftDown();   // Down Arrow
                     break;
-                    case (this.controls['inclineDown']):
-                        if (this.engine) this.model.rotateX(0.1);
+                    case 87: this.pitch(-0.05);  //
                     break;
-
-                    case (this.controls['flipLeft']):
-                        this.model.rotateY(0.1);
+                    case 83: this.pitch(0.05);
                     break;
-                    case (this.controls['flipRight']):
-                        if (this.engine) this.model.rotateY(-0.1);
+                    case 65: this.roll(0.1);
                     break;
-                    case this.controls['engine']:
-                        this.engine = !this.engine;
-                        this.gear = 4;
-                        this.lights.children[1].intensity = this.engine;
+                    case 68: this.roll(-0.1);
                     break;
-                    case this.controls['reset']:
-                        this.cam.lookAt(0,0,0);
-                    case 86:
-                        //this.switchPOV();
+                    case 37: this.dodge(-90);
                     break;
-                    case 81:
-                        const d = this.distance;
-                        if (d<13) {
-                            console.log(d);
-                            land();
-                        }
+                    case 39: this.dodge(90);
                     break;
-                    default:
-                        console.log(e.keyCode);
+                    case 81: this.land();
+                    break;
+                    case 8: this.reset();
+                    break;
                 }
             });
         }
@@ -201,6 +182,8 @@ function init(scene){
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     const ship = new Player(scene.getObjectByName("Ship"));
+    ship.setUp();
+
     const camera = ship.cam;
     const lights = [scene.getObjectByName("star1Light"), scene.getObjectByName("star2Light")];
     guiOptions();
