@@ -11,7 +11,7 @@ function loadScene(){
 
 window.onload = loadScene();
 
-    class Player {
+    class SpaceShip {
         constructor(shipObject) {
             this.model = shipObject;
             this.cam =  shipObject.getObjectByName("shipCam");
@@ -19,14 +19,15 @@ window.onload = loadScene();
 
             this.lights.children[1].visible = true;
             this.lights.children[1].intensity = 0.0;
-            this.lights.children[0].intensity = 5.0;
+            this.lights.children[0].intensity = 10.0;
 
             this.engine = false;
             this.gear = 4,
             this.speed = [-0.2, -0.1, -0.05, -0.01, 0, 0.01, 0.05, 0.1, 0.2]
 
-            this.incline = 0;
-            this.flip = 0;
+            this.rolling = 0;
+            this.pitching = 0;
+            this.camAngle = 0;
 
             this.fw = new THREE.Vector3();  // Flip Axis of Rotation
             this.u = new THREE.Vector3();
@@ -58,8 +59,8 @@ window.onload = loadScene();
             if((typeof cast !== 'undefined')&&(cast.distance <2)&&(!this.collision)){
                 console.log("Collision Detected");
                 this.collision = true;
-                this.ssEngine();
-                this.ssEngine();
+                this.gear = 4;
+                this.lights.children[1].intensity = this.engine;
             }
             else if((typeof cast !== 'undefined')&&(cast.distance >2)&&(this.collision)){
                 this.collision = false;
@@ -93,19 +94,34 @@ window.onload = loadScene();
 
         update(cast){
                 this.checkCollision(cast);
-                this.model.translateY(-this.speed[this.gear]);
-
                 if (this.landing) this.land();
+                else{
+                    if (this.rolling != 0){
+                        this.roll(this.rolling);
+                        if(-0.2 < this.camAngle && this.camAngle  < 0.2){
+                            this.cam.rotateZ(-this.rolling/2);
+                            this.camAngle -= this.rolling/2;
+                        }
+                    }
+                    else if (Math.abs(this.camAngle) > 0.01){
+                        this.cam.rotateZ(-Math.sign(this.camAngle)*0.02);
+                        this.camAngle -= Math.sign(this.camAngle)*0.02;
+                    }
+                    if (this.pitching != 0){
+                        this.pitch(this.pitching);
+                    }
+                    this.model.translateY(-this.speed[this.gear]);
+                }
                 this.updateAxis();
-
         }
 
-        ssEngine(){
+        ssEngine() {
             this.engine = !this.engine;
             console.log("Engine On: ",this.engine);
             this.gear = 4;
             this.lights.children[1].intensity = this.engine;
         }
+
         shiftUp(){
             if (this.engine && this.gear < 8 && !this.landed) {
                 this.gear +=1;
@@ -129,33 +145,67 @@ window.onload = loadScene();
 
         setUp(){
             window.addEventListener('keydown', (e) => {
-                switch(e.keyCode){
-                    case 16: this.ssEngine();    // Shift
+                switch(e.code){
+                    case "ShiftRight": this.ssEngine();               // Shift
                     break;
-                    case 38: this.shiftUp();     // Up Arrow
+                    case "ArrowUp": this.shiftUp();                // Up Arrow
                     break;
-                    case 40: this.shiftDown();   // Down Arrow
+                    case "ArrowDown": this.shiftDown();              // Down Arrow
                     break;
-                    case 87: this.pitch(-0.05);  //
+                    case "KeyW":                                // W
+                        if (this.engine && this.pitching > -0.02){
+                            this.pitching = -0.02;
+                        }
                     break;
-                    case 83: this.pitch(0.05);
+                    case "KeyS":                                // S
+                        if (this.engine && this.pitching < 0.02){
+                            this.pitching = 0.02;
+                        }
                     break;
-                    case 65: this.roll(0.1);
+                    case "KeyA":                                // A
+                        if (this.engine && this.rolling < 0.05){
+                            this.rolling = 0.05;
+                            //this.cam.rotateZ(-0.2);
+                        }
                     break;
-                    case 68: this.roll(-0.1);
+                    case "KeyD":                                // D
+                        if (this.engine && this.rolling > -0.05){
+                            this.rolling = -0.05;
+                            //this.cam.rotateZ(0.2);
+                        }
                     break;
-                    case 37: this.dodge(-90);
+                    case "ArrowLeft": this.dodge(-90);
                     break;
-                    case 39: this.dodge(90);
+                    case "ArrowRight": this.dodge(90);
                     break;
-                    case 81: this.land();
+                    case "KeyQ": this.land();
                     break;
-                    case 8: this.reset();
+                    case "Backspace": this.reset();
+                    break;
+                }
+            });
+            window.addEventListener('keyup', (e) => {
+                switch(e.code){
+                    case "KeyW": this.pitching = 0;
+                    break;
+                    case "KeyS": this.pitching = 0;
+                    break;
+                    case "KeyA":
+                        if(this.rolling > 0){
+                            //this.cam.rotateZ(0.2);
+                            this.rolling = 0;
+                        }
+                    break;
+                    case "KeyD":
+                        if(this.rolling < 0){
+                            //this.cam.rotateZ(-0.2);
+                            this.rolling = 0;
+                        }
                     break;
                 }
             });
         }
-    };
+    }
 
     class ColorGUIHelper {
         constructor(object, prop) {
@@ -181,10 +231,10 @@ function init(scene){
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-    const ship = new Player(scene.getObjectByName("Ship"));
-    ship.setUp();
+    const player = new SpaceShip(scene.getObjectByName("Ship"));
+    player.setUp();
 
-    const camera = ship.cam;
+    const camera = player.cam;
     const lights = [scene.getObjectByName("star1Light"), scene.getObjectByName("star2Light")];
     guiOptions();
     render();
@@ -198,9 +248,9 @@ function init(scene){
         orbits(time*0.001);
         camera.updateProjectionMatrix();
         var cast = new Array();
-        scene.getObjectByName("PlanetZigarov").raycast(ship.ray,cast);
+        scene.getObjectByName("PlanetZigarov").raycast(player.ray,cast);
         //if (cast.length >0) console.log(cast[0].distance.toPrecision(3));
-        ship.update(cast[0]);
+        player.update(cast[0]);
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     }
