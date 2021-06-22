@@ -20,6 +20,7 @@ window.onload = loadScene();
             this.lights.children[1].visible = true;
             this.lights.children[1].intensity = 0.0;
             this.lights.children[0].intensity = 10.0;
+            console.log(this.lights.children[0]);
 
             this.engine = false;
             this.gear = 4,
