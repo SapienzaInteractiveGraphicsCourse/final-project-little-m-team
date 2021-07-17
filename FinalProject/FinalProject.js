@@ -2,6 +2,7 @@ import * as THREE from '../resources/three/build/three.module.js';
 import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
+import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 
 function loadScene(){
     THREE.Cache.enabled = false;
@@ -36,8 +37,15 @@ window.onload = loadScene();
             this.ray = new THREE.Raycaster();
             this.updateAxis();
 
+            this.dodging = false;
             this.collision = false;
             this.landing = false;
+
+            this.animations = {
+                "dodgeL": new TWEEN.Tween(this).to({rolling: 3.1415}, 1000).onUpdate(this.dodge())
+            };
+            this.setUp();
+
         }
 
         updateAxis() {
@@ -81,9 +89,11 @@ window.onload = loadScene();
                     const d = p.length() - 10;
 
                     if (d<3){
+                        console.log(d)
                         const phi = p.angleTo(this.u);
-                        this.model.rotateOnWorldAxis(this.w,phi);
-                        this.model.translateOnAxis(this.u.negate(),d);
+                        this.model.rotateX(-phi);
+                        console.log(d);
+                        this.model.translateY(d+5);
                         this.ssEngine();
                         this.landed = true;
                     }
@@ -113,6 +123,7 @@ window.onload = loadScene();
                     }
                     this.model.translateY(-this.speed[this.gear]);
                 }
+                //TWEEN.update();
                 this.updateAxis();
         }
 
@@ -122,7 +133,6 @@ window.onload = loadScene();
             this.gear = 4;
             this.lights.children[1].intensity = this.engine;
         }
-
         shiftUp(){
             if (this.engine && this.gear < 8 && !this.landed) {
                 this.gear +=1;
@@ -141,17 +151,29 @@ window.onload = loadScene();
         pitch(phi){
             if (!this.landed) this.model.rotateX(phi);
         }
-        dodge(theta){}
+        dodge(){
+            console.log(this.rolling)
+            //this.cam.rotateZ(-this.rolling);
+            //this.model.rotateY(this.rolling);
+        }
         reset(){}
 
         setUp(){
             window.addEventListener('keydown', (e) => {
                 switch(e.code){
-                    case "ShiftRight": this.ssEngine();               // Shift
+                    case "ShiftRight": this.ssEngine();
                     break;
-                    case "ArrowUp": this.shiftUp();                // Up Arrow
+                    case "ArrowUp": this.shiftUp();
                     break;
-                    case "ArrowDown": this.shiftDown();              // Down Arrow
+                    case "ArrowDown": this.shiftDown();
+                    break;
+                    case "ArrowLeft":
+                        //this.dodging = true;
+                        //new TWEEN.Tween(this).to({rolling: 0.2}, 1000).onUpdate((self)=> {
+                        //    self.cam.rotateOnWorldAxis(self.fw,self.rolling);
+                            //self.model.rotateY(self.rolling);
+                        //}).start();
+
                     break;
                     case "KeyW":                                // W
                         if (this.engine && this.pitching > -0.02){
@@ -175,10 +197,10 @@ window.onload = loadScene();
                             //this.cam.rotateZ(0.2);
                         }
                     break;
-                    case "ArrowLeft": this.dodge(-90);
-                    break;
-                    case "ArrowRight": this.dodge(90);
-                    break;
+                    //case "ArrowLeft": this.dodge(-90);
+                    //break;
+                    //case "ArrowRight": this.dodge(90);
+                    //break;
                     case "KeyQ": this.land();
                     break;
                     case "Backspace": this.reset();
@@ -224,8 +246,8 @@ window.onload = loadScene();
 
 function init(scene){
     const canvas = document.getElementById("gl-canvas");
-    canvas.width  = 1024;
-    canvas.height = 576;
+    canvas.width = window.innerWidth*0.8;
+    canvas.height = window.innerHeight*0.8;
 
     const renderer = new THREE.WebGLRenderer({canvas});
     renderer.physicallyCorrectLights = true;
@@ -233,7 +255,7 @@ function init(scene){
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     const player = new SpaceShip(scene.getObjectByName("Ship"));
-    player.setUp();
+    //player.setUp();
 
     const camera = player.cam;
     const lights = [scene.getObjectByName("star1Light"), scene.getObjectByName("star2Light")];
@@ -241,6 +263,7 @@ function init(scene){
     render();
 
     function render(time) {
+        requestAnimationFrame(render);
         if (resizeRendererToDisplaySize(renderer)) {
             const canvas = renderer.domElement;
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
@@ -253,7 +276,7 @@ function init(scene){
         //if (cast.length >0) console.log(cast[0].distance.toPrecision(3));
         player.update(cast[0]);
         renderer.render(scene, camera);
-        requestAnimationFrame(render);
+
     }
 
     function guiOptions(){
