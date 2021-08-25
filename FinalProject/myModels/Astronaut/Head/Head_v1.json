@@ -1,0 +1,176 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "Object",
+		"generator": "Object3D.toJSON"
+	},
+	"geometries": [
+		{
+			"uuid": "0598AC1B-BED2-46DA-8238-28A0C835539E",
+			"type": "RingGeometry",
+			"innerRadius": 0.05,
+			"outerRadius": 0.1,
+			"thetaSegments": 32,
+			"phiSegments": 1,
+			"thetaStart": 0,
+			"thetaLength": 6.283185307179586
+		},
+		{
+			"uuid": "EB78A376-0A4D-440F-95A2-EB339C3F9FF2",
+			"type": "CircleGeometry",
+			"radius": 0.05,
+			"segments": 32,
+			"thetaStart": 0,
+			"thetaLength": 6.283185307179586
+		},
+		{
+			"uuid": "E9B2C3D3-6300-47CF-BA63-B4A17CC7DBD0",
+			"type": "SphereGeometry",
+			"radius": 1,
+			"widthSegments": 6,
+			"heightSegments": 6,
+			"phiStart": 0,
+			"phiLength": 6.283185307179586,
+			"thetaStart": 0,
+			"thetaLength": 1.5707963267948966
+		}],
+	"materials": [
+		{
+			"uuid": "C2252B3D-2631-4A9B-B9A4-D6FB40B27A40",
+			"type": "MeshStandardMaterial",
+			"color": 16777215,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 0,
+			"envMapIntensity": 1,
+			"refractionRatio": 0.98,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		},
+		{
+			"uuid": "2C8A85C1-C25C-4125-808B-D444A73D6CB5",
+			"type": "MeshStandardMaterial",
+			"color": 0,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 0,
+			"envMapIntensity": 1,
+			"refractionRatio": 0.98,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		},
+		{
+			"uuid": "986C36D5-DD47-46A7-A3E2-782053FE04AD",
+			"type": "MeshStandardMaterial",
+			"color": 16777215,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 0,
+			"envMapIntensity": 1,
+			"refractionRatio": 0.98,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680,
+			"wireframe": true
+		}],
+	"object": {
+		"uuid": "AEC9C2A6-52D7-45DF-8E3B-8EFEF8B7A7DD",
+		"type": "Group",
+		"name": "Head",
+		"layers": 1,
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"children": [
+			{
+				"uuid": "EC883320-C069-43D7-9132-1FFE22CE2E38",
+				"type": "Group",
+				"name": "Face",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+				"children": [
+					{
+						"uuid": "8EA66881-F3D3-4E40-93F2-E6CB23E6939A",
+						"type": "Group",
+						"name": "Eyes",
+						"layers": 1,
+						"matrix": [1.4999993170353763,0.0014313956143566795,0,0,-0.0014313956143566795,1.4999993170353763,0,0,0,0,1.5,0,0,0.5,0.5,1],
+						"children": [
+							{
+								"uuid": "C38DCD64-675D-4CA6-9F30-3FF2307EBB4C",
+								"type": "Mesh",
+								"name": "right_Eye",
+								"layers": 1,
+								"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-0.15,0,0,1],
+								"geometry": "0598AC1B-BED2-46DA-8238-28A0C835539E",
+								"material": "C2252B3D-2631-4A9B-B9A4-D6FB40B27A40",
+								"children": [
+									{
+										"uuid": "36BE6C3C-9637-42F8-9DCA-FF8B6A3E1646",
+										"type": "Mesh",
+										"name": "Circle",
+										"layers": 1,
+										"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+										"geometry": "EB78A376-0A4D-440F-95A2-EB339C3F9FF2",
+										"material": "2C8A85C1-C25C-4125-808B-D444A73D6CB5"
+									}]
+							},
+							{
+								"uuid": "B6A6D6E0-21CC-45B1-BC1A-1B2FFF8B839E",
+								"type": "Mesh",
+								"name": "left_Eye",
+								"layers": 1,
+								"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0.15,0,0,1],
+								"geometry": "0598AC1B-BED2-46DA-8238-28A0C835539E",
+								"material": "C2252B3D-2631-4A9B-B9A4-D6FB40B27A40",
+								"children": [
+									{
+										"uuid": "A37A4BA0-C720-4A76-A7E2-8A8210412B7C",
+										"type": "Mesh",
+										"name": "Circle",
+										"layers": 1,
+										"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+										"geometry": "EB78A376-0A4D-440F-95A2-EB339C3F9FF2",
+										"material": "2C8A85C1-C25C-4125-808B-D444A73D6CB5"
+									}]
+							}]
+					}]
+			},
+			{
+				"uuid": "A5F47DDE-C7A5-4B97-B909-17D44C983365",
+				"type": "Mesh",
+				"name": "Helmet",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+				"geometry": "E9B2C3D3-6300-47CF-BA63-B4A17CC7DBD0",
+				"material": "986C36D5-DD47-46A7-A3E2-782053FE04AD"
+			}]
+	}
+}
