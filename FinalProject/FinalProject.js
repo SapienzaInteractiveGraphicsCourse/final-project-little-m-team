@@ -24,6 +24,10 @@ window.onload = loadScene();
         }
     }
 
+    class Astronaut {
+        
+    }
+
 
 function init(scene){
     const canvas = document.getElementById("gl-canvas");
@@ -51,6 +55,7 @@ function init(scene){
     render();
 
     function render(time) {
+        requestAnimationFrame(render);
         if (resizeRendererToDisplaySize(renderer)) {
             const canvas = renderer.domElement;
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
@@ -66,7 +71,7 @@ function init(scene){
         */
 
         renderer.render(scene, camera);
-        requestAnimationFrame(render);
+
     }
 
     function guiOptions(){
