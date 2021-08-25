@@ -2,6 +2,7 @@ import * as THREE from '../resources/three/build/three.module.js';
 import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
+import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 
 function loadScene(){
     THREE.Cache.enabled = false;
@@ -246,7 +247,77 @@ function init(scene){
     scene.add(light);
 
     const player = scene.getObjectByName("myAstronaut");
-    console.log(player)
+    const rightLeg = player.getObjectByName("rightLeg");
+    const leftLeg = player.getObjectByName("leftLeg");
+    const leftArm = player.getObjectByName("leftArm");
+    const rightArm = player.getObjectByName("rightArm");
+
+    const joints = [
+        new TWEEN.Tween(player.position),
+
+        new TWEEN.Tween(rightLeg.getObjectByName('Anca').rotation),
+        new TWEEN.Tween(rightLeg.getObjectByName('Ginocchio').rotation),
+        new TWEEN.Tween(rightLeg.getObjectByName('Caviglia').rotation),
+
+        new TWEEN.Tween(leftLeg.getObjectByName('Anca').rotation),
+        new TWEEN.Tween(leftLeg.getObjectByName('Ginocchio').rotation),
+        new TWEEN.Tween(leftLeg.getObjectByName('Caviglia').rotation),
+
+        new TWEEN.Tween(rightArm.getObjectByName('Spalla').rotation),
+        new TWEEN.Tween(rightArm.getObjectByName('Gomito').rotation),
+
+        new TWEEN.Tween(leftArm.getObjectByName('Spalla').rotation),
+        new TWEEN.Tween(leftArm.getObjectByName('Gomito').rotation)
+    ]
+
+    const nJoints = joints.length;
+
+    const c = Math.PI/180;
+    const t = 1000;
+    let frame = 0;
+    const frames = [
+        [
+            {y: 0.47},
+            {x: 15*c},
+            {x: 30*c},
+            {y: 40*c},
+            {x: -35*c},
+            {x: 0*c},
+            {y: 0*c},
+            {x: -45*c},
+            {x: -90*c},
+            {x: 45*c},
+            {x: -45*c}
+        ],
+        [
+            {y: 0.51},
+            {x: 0*c},
+            {x: 90*c},
+            {y: 0*c},
+            {x: -30*c},
+            {x: 45*c},
+            {y: 15*c},
+            {x: -60*c},
+            {x: -90*c},
+            {x: 60*c},
+            {x: -45*c}
+        ]
+    ];
+
+    setTweens();
+    function setTweens(){
+        for (let i = 0; i<nJoints; i++){
+            joints[i].to(frames[frame][i],t).start()
+        }
+    }
+
+    joints[0].onComplete( function() {
+        frame +=1;
+        if (frame<frames.length){
+            setTweens();
+        }
+    });
+
 
     //guiOptions();
     render();
@@ -266,7 +337,7 @@ function init(scene){
         //if (cast.length >0) console.log(cast[0].distance.toPrecision(3));
         player.update(cast[0]);
         */
-
+        TWEEN.update();
         renderer.render(scene, camera);
 
     }
