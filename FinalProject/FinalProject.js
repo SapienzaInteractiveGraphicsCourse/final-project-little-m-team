@@ -292,24 +292,29 @@ function init(scene){
 
     const nFrames = frames[0].length;
     const tweens = setTweens();
+    //tweens.forEach((tween) => tween.start());
+
+//  EXPERIMENTING GROUP:
+    const group = new TWEEN.Group();
+    tweens.forEach((tween) => group.add(tween));
+    group.getAll().forEach((tween) => tween.start());
+
     function setTweens(){
+        const c = Math.PI/180;
         let tweens = [];
         for (let i = 0; i<joints.length; i++){
-            let sequence = [];
+            let firstTween, currentTween;
             for (let j = 0; j < nFrames; j++){
                 const tween = new TWEEN.Tween(joints[i]).to(frames[i][j],t);
-                sequence.push(tween);
-                if (j>0) sequence[j-1].chain(tween);
+                if (j==0) firstTween = tween;
+                else currentTween.chain(tween);
+                currentTween = tween;
             }
-            sequence[nFrames-1].chain(sequence[0]);
-            tweens.push(sequence[0]);
+            currentTween.chain(firstTween);
+            tweens.push(firstTween);
         }
         return tweens;
     }
-
-    tweens.forEach((tween) => tween.start());
-
-
 
 
 
