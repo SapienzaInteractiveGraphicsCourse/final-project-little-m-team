@@ -252,100 +252,65 @@ function init(scene){
     const leftArm = player.getObjectByName("leftArm");
     const rightArm = player.getObjectByName("rightArm");
 
-    const joints = [
-        new TWEEN.Tween(player.position),
-
-        new TWEEN.Tween(rightLeg.getObjectByName('Anca').rotation),
-        new TWEEN.Tween(rightLeg.getObjectByName('Ginocchio').rotation),
-        new TWEEN.Tween(rightLeg.getObjectByName('Caviglia').rotation),
-
-        new TWEEN.Tween(leftLeg.getObjectByName('Anca').rotation),
-        new TWEEN.Tween(leftLeg.getObjectByName('Ginocchio').rotation),
-        new TWEEN.Tween(leftLeg.getObjectByName('Caviglia').rotation),
-
-        new TWEEN.Tween(rightArm.getObjectByName('Spalla').rotation),
-        new TWEEN.Tween(rightArm.getObjectByName('Gomito').rotation),
-
-        new TWEEN.Tween(leftArm.getObjectByName('Spalla').rotation),
-        new TWEEN.Tween(leftArm.getObjectByName('Gomito').rotation)
-    ]
-
-    const nJoints = joints.length;
 
     const c = Math.PI/180;
     const t = 1000;
-    let frame = 0;
+    const joints = [
+        player.position,
+
+        rightLeg.getObjectByName('Anca').rotation,
+        rightLeg.getObjectByName('Ginocchio').rotation,
+        rightLeg.getObjectByName('Caviglia').rotation,
+
+        leftLeg.getObjectByName('Anca').rotation,
+        leftLeg.getObjectByName('Ginocchio').rotation,
+        leftLeg.getObjectByName('Caviglia').rotation,
+
+        rightArm.getObjectByName('Spalla').rotation,
+        rightArm.getObjectByName('Gomito').rotation,
+
+        leftArm.getObjectByName('Spalla').rotation,
+        leftArm.getObjectByName('Gomito').rotation
+    ];
     const frames = [
-        [
-            {y: 0.47},
-            {x: 15*c},
-            {x: 30*c},
-            {y: 40*c},
-            {x: -35*c},
-            {x: 0*c},
-            {y: 0*c},
-            {x: -45*c},
-            {x: -90*c},
-            {x: 45*c},
-            {x: -45*c}
-        ],
-        [
-            {y: 0.51},
-            {x: 0*c},
-            {x: 90*c},
-            {y: 0*c},
-            {x: -30*c},
-            {x: 45*c},
-            {y: 15*c},
-            {x: -60*c},
-            {x: -90*c},
-            {x: 60*c},
-            {x: -45*c}
-        ],
-        [
-            {y: 0.55},
-            {x: -30*c},
-            {x: 120*c},
-            {y: 30*c},
-            {x: 5*c},
-            {x: 5*c},
-            {y: 10*c},
-            {x: 30*c},
-            {x: -90*c},
-            {x: 30*c},
-            {x: -90*c}
-        ],
+        [ {y: 0.47}, {y: 0.51}, {y: 0.55}, {y: 0.57},       {y: 0.47}, {y: 0.51}, {y: 0.55}, {y: 0.57} ],       // Height
 
-        [
-            {y: 0.57},
-            {x: 15*c},
-            {x: 0*c},
-            {y: -15*c},
-            {x: -60*c},
-            {x: 90*c},
-            {y: 0*c},
-            {x: 45*c},
-            {x: -75*c},
-            {x: 30*c},
-            {x: -90*c}
-        ],
+        [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightLeg.Anca
+        [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightLeg.Ginocchio
+        [ {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c},         {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c} ],       // rightLeg.Caviglia
 
+        [ {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c},      {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c} ],      // leftLeg.Anca
+        [ {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c},          {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c} ],      // leftLeg.Ginocchio
+        [ {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c},       {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c} ],         // leftLeg.Caviglia
 
+        [ {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c},     {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c} ],       // rightArm.Spalla
+        [ {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c},   {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c} ],   // rightArm.Gomito
+
+        [ {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c},       {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c} ],     // leftArm.Spalla
+        [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ]    // leftArm.Gomito
     ];
 
-    setTweens();
+    const nFrames = frames[0].length;
+    const tweens = setTweens();
     function setTweens(){
-        for (let i = 0; i<nJoints; i++){
-            joints[i].to(frames[frame][i],t).start()
+        let tweens = [];
+        for (let i = 0; i<joints.length; i++){
+            let sequence = [];
+            for (let j = 0; j < nFrames; j++){
+                const tween = new TWEEN.Tween(joints[i]).to(frames[i][j],t);
+                sequence.push(tween);
+                if (j>0) sequence[j-1].chain(tween);
+            }
+            sequence[nFrames-1].chain(sequence[0]);
+            tweens.push(sequence[0]);
         }
+        return tweens;
     }
 
-    joints[0].onComplete( function() {
-        frame +=1;
-        if (frame<frames.length){
-            setTweens();
-        }
-    });
+    tweens.forEach((tween) => tween.start());
+
+
+
 
 
     //guiOptions();
