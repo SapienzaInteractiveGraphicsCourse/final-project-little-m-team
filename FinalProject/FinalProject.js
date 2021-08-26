@@ -3,7 +3,7 @@ import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitCon
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
-
+import {Animation} from "./Animation.js"
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
@@ -207,11 +207,6 @@ window.onload = loadScene();
         }
     }
 
-
-    class Astronaut {
-
-    }
-
     class ColorGUIHelper {
         constructor(object, prop) {
             this.object = object;
@@ -289,33 +284,38 @@ function init(scene){
         [ {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c},       {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c} ],     // leftArm.Spalla
         [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ]    // leftArm.Gomito
     ];
-
     const nFrames = frames[0].length;
-    const tweens = setTweens();
-    //tweens.forEach((tween) => tween.start());
 
-//  EXPERIMENTING GROUP:
-    const group = new TWEEN.Group();
-    tweens.forEach((tween) => group.add(tween));
-    group.getAll().forEach((tween) => tween.start());
+    const clip = new Animation('WalkingCycle', joints, frames, ([t] * nFrames));
+    clip.Start()
 
-    function setTweens(){
-        const c = Math.PI/180;
-        let tweens = [];
-        for (let i = 0; i<joints.length; i++){
-            let firstTween, currentTween;
-            for (let j = 0; j < nFrames; j++){
-                const tween = new TWEEN.Tween(joints[i]).to(frames[i][j],t);
-                if (j==0) firstTween = tween;
-                else currentTween.chain(tween);
-                currentTween = tween;
-            }
-            currentTween.chain(firstTween);
-            tweens.push(firstTween);
-        }
-        return tweens;
-    }
 
+
+//     const tweens = setTweens();
+//     //tweens.forEach((tween) => tween.start());
+//
+// //  EXPERIMENTING GROUP:
+//     const group = new TWEEN.Group();
+//     tweens.forEach((tween) => group.add(tween));
+//     group.getAll().forEach((tween) => tween.start());
+//
+//     function setTweens(){
+//         const c = Math.PI/180;
+//         let tweens = [];
+//         for (let i = 0; i<joints.length; i++){
+//             let firstTween, currentTween;
+//             for (let j = 0; j < nFrames; j++){
+//                 const tween = new TWEEN.Tween(joints[i]).to(frames[i][j],t);
+//                 if (j==0) firstTween = tween;
+//                 else currentTween.chain(tween);
+//                 currentTween = tween;
+//             }
+//             currentTween.chain(firstTween);
+//             tweens.push(firstTween);
+//         }
+//         return tweens;
+//     }
+//
 
 
     //guiOptions();
