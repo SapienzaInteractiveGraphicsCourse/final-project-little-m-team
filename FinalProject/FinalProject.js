@@ -3,8 +3,7 @@ import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitCon
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
-import {Animation} from "./Animation.js"
-import {Data} from "./Data.js"
+import {Animation,Player} from "./Animation.js"
 
 window.onload = loadScene();
 
@@ -243,57 +242,80 @@ function init(scene){
     light.position.set(0, 0, 1);
     scene.add(light);
 
-    const player = scene.getObjectByName("myAstronaut");
-    const rightLeg = player.getObjectByName("rightLeg");
-    const leftLeg = player.getObjectByName("leftLeg");
-    const leftArm = player.getObjectByName("leftArm");
-    const rightArm = player.getObjectByName("rightArm");
-
-
-    const c = Math.PI/180;
-    const t = 1000;
-    const joints = [
-        player.position,
-
-        rightLeg.getObjectByName('Anca').rotation,
-        rightLeg.getObjectByName('Ginocchio').rotation,
-        rightLeg.getObjectByName('Caviglia').rotation,
-
-        leftLeg.getObjectByName('Anca').rotation,
-        leftLeg.getObjectByName('Ginocchio').rotation,
-        leftLeg.getObjectByName('Caviglia').rotation,
-
-        rightArm.getObjectByName('Spalla').rotation,
-        rightArm.getObjectByName('Gomito').rotation,
-
-        leftArm.getObjectByName('Spalla').rotation,
-        leftArm.getObjectByName('Gomito').rotation
-    ];
-    const frames = [
-        [ {y: 0.47}, {y: 0.51}, {y: 0.55}, {y: 0.57},       {y: 0.47}, {y: 0.51}, {y: 0.55}, {y: 0.57} ],       // Height
-
-        [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightLeg.Anca
-        [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightLeg.Ginocchio
-        [ {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c},         {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c} ],       // rightLeg.Caviglia
-
-        [ {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c},      {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c} ],      // leftLeg.Anca
-        [ {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c},          {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c} ],      // leftLeg.Ginocchio
-        [ {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c},       {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c} ],         // leftLeg.Caviglia
-
-        [ {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c},     {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c} ],       // rightArm.Spalla
-        [ {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c},   {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c} ],   // rightArm.Gomito
-
-        [ {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c},       {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c} ],     // leftArm.Spalla
-        [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ]    // leftArm.Gomito
-    ];
-    const nFrames = frames[0].length;
-    const clip = new Animation('Walk', joints, frames, ([t] * nFrames));
-    document.getElementById("StartButton").onclick = function() {clip.Start()};
-    document.getElementById("StopButton").onclick = function() {clip.Stop()};
-
-    console.log(Data.astronaut.animations.Walk.frames)
-
-
+    //const player = scene.getObjectByName("myAstronaut");
+    // const rightLeg = player.getObjectByName("rightLeg");
+    // const leftLeg = player.getObjectByName("leftLeg");
+    // const leftArm = player.getObjectByName("leftArm");
+    // const rightArm = player.getObjectByName("rightArm");
+    //
+    //
+    // const c = Math.PI/180;
+    // const t = 1000;
+    // const joints = [
+    //     player.position,
+    //
+    //     rightLeg.getObjectByName('Anca').rotation,
+    //     rightLeg.getObjectByName('Ginocchio').rotation,
+    //     rightLeg.getObjectByName('Caviglia').rotation,
+    //
+    //     leftLeg.getObjectByName('Anca').rotation,
+    //     leftLeg.getObjectByName('Ginocchio').rotation,
+    //     leftLeg.getObjectByName('Caviglia').rotation,
+    //
+    //     rightArm.getObjectByName('Spalla').rotation,
+    //     rightArm.getObjectByName('Gomito').rotation,
+    //
+    //     leftArm.getObjectByName('Spalla').rotation,
+    //     leftArm.getObjectByName('Gomito').rotation
+    // ];
+    // const frames = [
+    //     [ {y: 0.47}, {y: 0.51}, {y: 0.55}, {y: 0.57},       {y: 0.47}, {y: 0.51}, {y: 0.55}, {y: 0.57} ],       // Height
+    //
+    //     [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightLeg.Anca
+    //     [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightLeg.Ginocchio
+    //     [ {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c},         {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c} ],       // rightLeg.Caviglia
+    //
+    //     [ {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c},      {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c} ],      // leftLeg.Anca
+    //     [ {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c},          {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c} ],      // leftLeg.Ginocchio
+    //     [ {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c},       {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c} ],         // leftLeg.Caviglia
+    //
+    //     [ {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c},     {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c} ],       // rightArm.Spalla
+    //     [ {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c},   {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c} ],   // rightArm.Gomito
+    //
+    //     [ {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c},       {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c} ],     // leftArm.Spalla
+    //     [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ]    // leftArm.Gomito
+    // ];
+    // const nFrames = frames[0].length;
+    //
+    //
+    //
+    // const clip = new Animation('Walk', joints, frames, ([t] * nFrames));
+    // document.getElementById("StartButton").onclick = function() {clip.Start()};
+    // document.getElementById("StopButton").onclick = function() {clip.Stop()};
+    //
+    // const idJoints = [
+    //     player.id,
+    //
+    //     rightLeg.getObjectByName('Anca').id,
+    //     rightLeg.getObjectByName('Ginocchio').id,
+    //     rightLeg.getObjectByName('Caviglia').id,
+    //
+    //     leftLeg.getObjectByName('Anca').id,
+    //     leftLeg.getObjectByName('Ginocchio').id,
+    //     leftLeg.getObjectByName('Caviglia').id,
+    //
+    //     rightArm.getObjectByName('Spalla').id,
+    //     rightArm.getObjectByName('Gomito').id,
+    //
+    //     leftArm.getObjectByName('Spalla').id,
+    //     leftArm.getObjectByName('Gomito').id
+    // ];
+    //
+    // console.log(idJoints);
+    const astronaut = new Player(scene.getObjectByName("myAstronaut"))
+    //astronaut.animations["Walk"].Start();
+    document.getElementById("StartButton").onclick = function() {astronaut.move()};
+    document.getElementById("StopButton").onclick = function() {astronaut.reset()};
 
 //     const tweens = setTweens();
 //     //tweens.forEach((tween) => tween.start());
@@ -340,7 +362,8 @@ function init(scene){
         //if (cast.length >0) console.log(cast[0].distance.toPrecision(3));
         player.update(cast[0]);
         */
-        clip.Update(time);
+        //clip.Update(time);
+        astronaut.update();
         renderer.render(scene, camera);
 
     }

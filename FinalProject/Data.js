@@ -2,7 +2,7 @@ const c = Math.PI/180;
 
 export const Data = {
     astronaut: {
-        joints: null,
+        joints: [8, 51, 53, 55, 58, 60, 62, 18, 20, 30, 32],
         animations: {
             'Walk': {
                 frames : [
@@ -22,11 +22,13 @@ export const Data = {
                     [ {x: 45*c}, {x: 60*c}, {x: 30*c}, {x: 30*c},       {x: -45*c}, {x: -60*c}, {x: 30*c}, {x: 45*c} ],     // leftArm.Spalla
                     [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ]    // leftArm.Gomito
                 ],
-                periods: [1000]*8
+                periods: [100]*8,
+                repeat: true
             },
-            'Static': {
-                frames: [{y: 0.5}, {x: 0}, {x: 0}, {y: 0}, {x: 0}, {x: 0}, {y: 0}, {x: 0}, {x: 0}, {x: 0}, {x: 0}],
-                periods: [250]*8
+            'Reset': {
+                frames: [[{y: 0.5}], [{x: 0}], [{x: 0}], [{y: 0}], [{x: 0}], [{x: 0}], [{y: 0}], [{x: 0}], [{x: 0}], [{x: 0}], [{x: 0}]],
+                periods: [300],
+                repeat: false
             }
         }
     }
