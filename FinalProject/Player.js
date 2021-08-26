@@ -91,21 +91,3 @@ export class Animation{
         this.group.update();
     }
 }
-
-
-//GARBAGE COLLECTION:
-// Old setTweens() Funcition:
-// function setTweens(){
-//     let tweens = [];
-//     for (let i = 0; i<joints.length; i++){
-//         let sequence = [];
-//         for (let j = 0; j < nFrames; j++){
-//             const tween = new TWEEN.Tween(joints[i]).to(frames[i][j],t);
-//             sequence.push(tween);
-//             if (j>0) sequence[j-1].chain(tween);
-//         }
-//         sequence[nFrames-1].chain(sequence[0]);
-//         tweens.push(sequence[0]);
-//     }
-//     return tweens;
-// }

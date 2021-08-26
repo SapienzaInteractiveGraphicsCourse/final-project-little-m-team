@@ -3,7 +3,7 @@ import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitCon
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
-import {Animation,Player} from "./Animation.js"
+import {Animation,Player} from "./Player.js"
 
 window.onload = loadScene();
 
