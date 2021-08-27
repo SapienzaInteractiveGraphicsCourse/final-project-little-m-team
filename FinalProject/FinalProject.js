@@ -61,6 +61,12 @@ function init(scene){
             case "KeyW":
                 player.move();
             break;
+            case "KeyA":
+                player.turn = 'left';
+            break;
+            case "KeyD":
+                player.turn = 'right';
+            break;
         }
     });
 
@@ -69,11 +75,17 @@ function init(scene){
             case "KeyW":
                 player.reset();
             break;
+            case "KeyA":
+                player.turn = 'straight';
+            break;
+            case "KeyD":
+                player.turn = 'straight';
+            break;
         }
     });
 
     //guiOptions();
-    render(time);
+    render();
 
     function render(time) {
         requestAnimationFrame(render);
@@ -98,13 +110,18 @@ function init(scene){
     }
 
     function orbits(t){
-            scene.getObjectByName("Stars").rotation.y = t*0.1;
-            //scene.getObjectByName("PlanetZigarov").rotation.y = -t*0.01;
-            scene.getObjectByName("Universe").rotation.y = t*0.01;
-
-        if(player.animations.Walk.playing){
-            scene.getObjectByName('Planet').rotateZ(0.001);
+        scene.getObjectByName("Stars").rotateY(0.001);
+        scene.getObjectByName("Universe").rotateX(-0.0005);
+        const planet = scene.getObjectByName('Planet');
+        const [moving, direction] = player.moving;
+        if(moving){
+            planet.rotation.y +=(direction * 0.025);
+            const theta = planet.rotation.y;
+            console.log(theta)
+            let w = new THREE.Vector3(Math.sin(theta),0,Math.cos(theta));
+            planet.rotateOnAxis(w,0.001);
         }
+
     }
 
     function guiOptions(){

@@ -24,7 +24,7 @@ export class Player {
 
     update() {
         for (const [name, clip] of Object.entries(this.animations)) {
-            if(clip.playing) clip.Update();
+            clip.Update();
         }
     }
 
@@ -37,17 +37,32 @@ export class Player {
         this.animations.Reset.setTweens();
         this.animations.Reset.Start();
     }
-}
 
-class Planet {
-    constructor(obj){
-        this.obj = obj;
+    get moving(){
+        return ([this.animations.Walk.playing, this.animations.Walk.direction]);
+    }
+
+
+    set turn(direction){
+        if (direction == 'left'){
+            this.animations.Walk.direction = -1;
+            //const tween = new TWEEN.Tween(this.model.rotation,this.animations.Walk.group).to({y: 0.1},100).start();
+        }
+        else if (direction == 'right'){
+            this.animations.Walk.direction = 1;
+            //const tween = new TWEEN.Tween(this.model.rotation,this.animations.Walk.group).to({y: -0.1},100).start();
+        }
+        else if (direction == 'straight'){
+            this.animations.Walk.direction = 0;
+            //const tween = new TWEEN.Tween(this.model.rotation,this.animations.Walk.group).to({y: 0},100).start();
+        }
     }
 }
 
 class Animation{
     playing = false;
     paused = false;
+    direction = 0;
     group = new TWEEN.Group();
     tweens = [];
     constructor(name, joints, frames, periods, repeat) {
