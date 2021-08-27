@@ -6,14 +6,6 @@
 	},
 	"geometries": [
 		{
-			"uuid": "BBF29351-4C8F-4B29-9665-C8D32CEADFEC",
-			"type": "PlaneGeometry",
-			"width": 1,
-			"height": 1,
-			"widthSegments": 1,
-			"heightSegments": 1
-		},
-		{
 			"uuid": "82387592-80DB-4138-8403-6D488CD03736",
 			"type": "SphereGeometry",
 			"radius": 0.1,
@@ -239,30 +231,16 @@
 			"widthSegments": 1,
 			"heightSegments": 1,
 			"depthSegments": 1
+		},
+		{
+			"uuid": "BBF29351-4C8F-4B29-9665-C8D32CEADFEC",
+			"type": "PlaneGeometry",
+			"width": 1,
+			"height": 1,
+			"widthSegments": 1,
+			"heightSegments": 1
 		}],
 	"materials": [
-		{
-			"uuid": "9346D576-908B-4452-9A25-06E9F283DF42",
-			"type": "MeshStandardMaterial",
-			"color": 71697,
-			"roughness": 1,
-			"metalness": 0,
-			"emissive": 0,
-			"envMapIntensity": 1,
-			"refractionRatio": 0.98,
-			"depthFunc": 3,
-			"depthTest": true,
-			"depthWrite": true,
-			"colorWrite": true,
-			"stencilWrite": false,
-			"stencilWriteMask": 255,
-			"stencilFunc": 519,
-			"stencilRef": 0,
-			"stencilFuncMask": 255,
-			"stencilFail": 7680,
-			"stencilZFail": 7680,
-			"stencilZPass": 7680
-		},
 		{
 			"uuid": "A4714F1C-8443-433A-934F-B6ACC41A8AF4",
 			"type": "MeshStandardMaterial",
@@ -419,6 +397,28 @@
 			"stencilZFail": 7680,
 			"stencilZPass": 7680,
 			"wireframe": true
+		},
+		{
+			"uuid": "9346D576-908B-4452-9A25-06E9F283DF42",
+			"type": "MeshStandardMaterial",
+			"color": 71697,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 0,
+			"envMapIntensity": 1,
+			"refractionRatio": 0.98,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"colorWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
 		}],
 	"object": {
 		"uuid": "0825F3CE-5A3E-4D5E-A696-71A3134E1BF7",
@@ -428,27 +428,9 @@
 		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
 		"children": [
 			{
-				"uuid": "5AEC5C86-E74D-4337-8706-23D581699A22",
-				"type": "Mesh",
-				"name": "Plane",
-				"layers": 1,
-				"matrix": [2,0,0,0,0,4.440892098500626e-16,-2,0,0,2,4.440892098500626e-16,0,0,0,0,1],
-				"geometry": "BBF29351-4C8F-4B29-9665-C8D32CEADFEC",
-				"material": "9346D576-908B-4452-9A25-06E9F283DF42"
-			},
-			{
-				"uuid": "E180E81E-3AC7-4640-A7F5-94AA6C037E5C",
-				"type": "AmbientLight",
-				"name": "AmbientLight",
-				"layers": 1,
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
-				"color": 16777215,
-				"intensity": 1
-			},
-			{
 				"uuid": "1262E053-ACD2-4649-AF79-27AD8BC2FAA1",
 				"type": "Group",
-				"name": "myAstronaut",
+				"name": "Astronaut",
 				"castShadow": true,
 				"layers": 1,
 				"matrix": [2.220446049250313e-16,0,-1,0,0,1,0,0,1,0,2.220446049250313e-16,0,0,0.55,0,1],
@@ -529,7 +511,7 @@
 																	{
 																		"uuid": "69A7889B-60F2-42F0-9AC6-C506F0F27F8E",
 																		"type": "Mesh",
-																		"name": "Spalla",
+																		"name": "rightShoulder",
 																		"castShadow": true,
 																		"layers": 1,
 																		"matrix": [0.9961946980917455,-0.08715574274765818,0,0,0.08715574274765818,0.9961946980917455,0,0,0,0,1,0,0,0,0,1],
@@ -548,9 +530,9 @@
 																			{
 																				"uuid": "5C94BBA4-8186-4529-B633-4616206793AF",
 																				"type": "Mesh",
-																				"name": "Gomito",
+																				"name": "rightElbow",
 																				"layers": 1,
-																				"matrix": [-0.25881904510252124,0.9659258262890685,0,0,-0.9659258262890685,-0.25881904510252124,0,0,0,0,1,0,0,-0.6,0,1],
+																				"matrix": [-0.2588190451025213,0.9659258262890685,0,0,-0.9659258262890685,-0.2588190451025213,0,0,0,0,1,0,0,-0.6,0,1],
 																				"geometry": "CD6372B4-FDCB-4CD6-82BC-AE032987DF41",
 																				"material": "3008901F-CC69-4FAC-89DC-3FF60E5789DD",
 																				"children": [
@@ -566,7 +548,7 @@
 																					{
 																						"uuid": "4BEFED66-E19E-417F-9C44-35171FFFD6F8",
 																						"type": "Group",
-																						"name": "Hand",
+																						"name": "rightHand",
 																						"layers": 1,
 																						"matrix": [1,0,0,0,0,2.220446049250313e-16,1,0,0,-1,2.220446049250313e-16,0,-0.6,0,0,1],
 																						"children": [
@@ -639,7 +621,7 @@
 																	{
 																		"uuid": "7C474840-26B7-40F4-8DEB-25537581F41D",
 																		"type": "Mesh",
-																		"name": "Spalla",
+																		"name": "leftShoulder",
 																		"castShadow": true,
 																		"layers": 1,
 																		"matrix": [0.9961946980917455,0.08715574274765818,0,0,-0.08715574274765818,0.9961946980917455,0,0,0,0,1,0,0,0,0,1],
@@ -658,7 +640,7 @@
 																			{
 																				"uuid": "7C2D4075-AB2D-4C9C-AC41-D63F09206AA6",
 																				"type": "Mesh",
-																				"name": "Gomito",
+																				"name": "leftElbow",
 																				"layers": 1,
 																				"matrix": [0.2588190451025208,0.9659258262890685,0,0,-0.9659258262890685,0.2588190451025208,0,0,0,0,1,0,0,-0.6,0,1],
 																				"geometry": "CD6372B4-FDCB-4CD6-82BC-AE032987DF41",
@@ -676,7 +658,7 @@
 																					{
 																						"uuid": "2AEA658B-B428-40D7-A39D-25CE9592EB53",
 																						"type": "Group",
-																						"name": "Hand",
+																						"name": "lefHand",
 																						"layers": 1,
 																						"matrix": [1,0,0,0,0,2.220446049250313e-16,1,0,0,-1,2.220446049250313e-16,0,-0.6,0,0,1],
 																						"children": [
@@ -826,12 +808,12 @@
 										"type": "Group",
 										"name": "rightLeg",
 										"layers": 1,
-										"matrix": [0.49985074489059156,-0.012216089076326576,0,0,0.012216089076326576,0.49985074489059156,0,0,0,0,0.5,0,-0.15,0,0,1],
+										"matrix": [0.4998507448905914,-0.01221608907632658,0,0,0.01221608907632658,0.4998507448905914,0,0,0,0,0.5,0,-0.15,0,0,1],
 										"children": [
 											{
 												"uuid": "7C474840-26B7-40F4-8DEB-25537581F41D",
 												"type": "Mesh",
-												"name": "Anca",
+												"name": "rightHip",
 												"castShadow": true,
 												"layers": 1,
 												"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
@@ -850,9 +832,9 @@
 													{
 														"uuid": "7C2D4075-AB2D-4C9C-AC41-D63F09206AA6",
 														"type": "Mesh",
-														"name": "Ginocchio",
+														"name": "rightKnee",
 														"layers": 1,
-														"matrix": [1.7763568394002506e-16,0.8000000000000003,0,0,-0.8000000000000003,1.7763568394002506e-16,0,0,0,0,0.8,0,0,-0.56,0,1],
+														"matrix": [1.776356839400251e-16,0.8000000000000003,0,0,-0.8000000000000003,1.776356839400251e-16,0,0,0,0,0.8,0,0,-0.56,0,1],
 														"geometry": "CD6372B4-FDCB-4CD6-82BC-AE032987DF41",
 														"material": "3008901F-CC69-4FAC-89DC-3FF60E5789DD",
 														"children": [
@@ -868,7 +850,7 @@
 															{
 																"uuid": "C88A09AE-C0CF-4785-A168-551B37B53B05",
 																"type": "Mesh",
-																"name": "Caviglia",
+																"name": "rightAnkle",
 																"castShadow": true,
 																"layers": 1,
 																"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-0.6,0,0,1],
@@ -898,7 +880,7 @@
 											{
 												"uuid": "D25C0A52-157B-4A44-A63B-8385C2DF4020",
 												"type": "Mesh",
-												"name": "Anca",
+												"name": "leftHip",
 												"castShadow": true,
 												"layers": 1,
 												"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
@@ -917,9 +899,9 @@
 													{
 														"uuid": "2A76ABCD-EF6B-46F4-8CF9-619F06CF8BE8",
 														"type": "Mesh",
-														"name": "Ginocchio",
+														"name": "leftKnee",
 														"layers": 1,
-														"matrix": [1.7763568394002506e-16,0.8000000000000003,0,0,-0.8000000000000003,1.7763568394002506e-16,0,0,0,0,0.8,0,0,-0.56,0,1],
+														"matrix": [1.776356839400251e-16,0.8000000000000003,0,0,-0.8000000000000003,1.776356839400251e-16,0,0,0,0,0.8,0,0,-0.56,0,1],
 														"geometry": "CD6372B4-FDCB-4CD6-82BC-AE032987DF41",
 														"material": "3008901F-CC69-4FAC-89DC-3FF60E5789DD",
 														"children": [
@@ -935,7 +917,7 @@
 															{
 																"uuid": "21C7BC96-C548-40CC-B3AF-F6A33DC31AF0",
 																"type": "Mesh",
-																"name": "Caviglia",
+																"name": "leftAnkle",
 																"castShadow": true,
 																"layers": 1,
 																"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-0.6,0,0,1],
@@ -957,6 +939,24 @@
 									}]
 							}]
 					}]
+			},
+			{
+				"uuid": "E180E81E-3AC7-4640-A7F5-94AA6C037E5C",
+				"type": "AmbientLight",
+				"name": "AmbientLight",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+				"color": 16777215,
+				"intensity": 1
+			},
+			{
+				"uuid": "5AEC5C86-E74D-4337-8706-23D581699A22",
+				"type": "Mesh",
+				"name": "Plane",
+				"layers": 1,
+				"matrix": [2,0,0,0,0,4.440892098500626e-16,-2,0,0,2,4.440892098500626e-16,0,0,0,0,1],
+				"geometry": "BBF29351-4C8F-4B29-9665-C8D32CEADFEC",
+				"material": "9346D576-908B-4452-9A25-06E9F283DF42"
 			}]
 	}
 }
