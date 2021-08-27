@@ -73,7 +73,7 @@ function init(scene){
     });
 
     //guiOptions();
-    render();
+    render(time);
 
     function render(time) {
         requestAnimationFrame(render);
@@ -92,12 +92,16 @@ function init(scene){
         */
         //clip.Update(time);
         player.update();
-        orbits();
+        orbits(time);
         renderer.render(scene, camera);
 
     }
 
-    function orbits(){
+    function orbits(t){
+            scene.getObjectByName("Stars").rotation.y = t*0.1;
+            //scene.getObjectByName("PlanetZigarov").rotation.y = -t*0.01;
+            scene.getObjectByName("Universe").rotation.y = t*0.01;
+
         if(player.animations.Walk.playing){
             scene.getObjectByName('Planet').rotateZ(0.001);
         }
