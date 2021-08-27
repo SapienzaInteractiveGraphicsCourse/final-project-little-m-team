@@ -6,6 +6,7 @@ export class Player {
     animations = {};
 
     constructor(obj){
+        this.model = obj;
         this.name = obj.name;
 
 //      COMPUTE JOINTS:
@@ -38,7 +39,13 @@ export class Player {
     }
 }
 
-export class Animation{
+class Planet {
+    constructor(obj){
+        this.obj = obj;
+    }
+}
+
+class Animation{
     playing = false;
     paused = false;
     group = new TWEEN.Group();
@@ -56,22 +63,24 @@ export class Animation{
         let tweens = [];
         const c = Math.PI/180;
         for (let i = 0; i<this.joints.length; i++){
-            let firstTween, secondTween, currentTween;
+            let firstTween, currentTween;
 
-            for (let j = 0; j < this.frames[0].length; j++) {
+            for (let j = 0; j < this.frames[i].length; j++) {
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
                 if (j==0) firstTween = tween;
                 else currentTween.chain(tween);
                 currentTween = tween;
-                if (j==1) secondTween = tween;
             }
 
-            if (this.repeat && secondTween) {
-                const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0]);
-                currentTween.chain(tween,secondTween);
+            if (this.repeat) {
+                const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
+                currentTween.chain(tween,firstTween)
+                //currentTween.chain(firstTween);
             }
+
             tweens.push(firstTween);
         }
+
         this.tweens = tweens;
     }
 

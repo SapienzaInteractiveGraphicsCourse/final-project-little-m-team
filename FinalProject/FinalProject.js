@@ -3,15 +3,15 @@ import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitCon
 import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
-import {Animation,Player} from "./Player.js"
+import {Player} from "./Player.js"
 
 window.onload = loadScene();
 
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
-    loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
+    loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
+    //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
 }
 
@@ -40,22 +40,37 @@ function init(scene){
     renderer.shadowMap.enabled = true;
     //renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-    const camera = new THREE.PerspectiveCamera( 50, canvas.width / canvas.height, 0.01, 1000);
-    camera.position.set(0,11,3);
-    camera.rotateX(-0.2);
-    scene.add(camera);
+    // const camera = new THREE.PerspectiveCamera( 50, canvas.width / canvas.height, 0.01, 1000);
+    // camera.position.set(0,11,3);
+    // camera.rotateX(-0.2);
+    // scene.add(camera);
+    //
+    // const light = new THREE.PointLight();
+    // light.position.set(0, 10, 1);
+    // scene.add(light);
+    // scene.getObjectByName("Astronaut").position.set(0,10.5,0)
 
-    const light = new THREE.PointLight();
-    light.position.set(0, 10, 1);
-    scene.add(light);
+    const player = new Player(scene.getObjectByName("Astronaut"))
+    document.getElementById("StartButton").onclick = function() {player.move()};
+    document.getElementById("StopButton").onclick = function() {player.reset()};
 
-    //const fabio = scene.getObjectByName("root");
-    scene.getObjectByName("Astronaut").position.set(0,10.5,0)
-    const astronaut = new Player(scene.getObjectByName("Astronaut"))
-    document.getElementById("StartButton").onclick = function() {astronaut.move()};
-    document.getElementById("StopButton").onclick = function() {astronaut.reset()};
+    const camera = scene.getObjectByName("PlayerCam");
 
-    //const camera = scene.getObjectByName("PlayerCam");
+    window.addEventListener('keydown', (e) => {
+        switch(e.code){
+            case "KeyW":
+                player.move();
+            break;
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        switch(e.code){
+            case "KeyW":
+                player.reset();
+            break;
+        }
+    });
 
     //guiOptions();
     render();
@@ -76,9 +91,16 @@ function init(scene){
         player.update(cast[0]);
         */
         //clip.Update(time);
-        astronaut.update();
+        player.update();
+        orbits();
         renderer.render(scene, camera);
 
+    }
+
+    function orbits(){
+        if(player.animations.Walk.playing){
+            scene.getObjectByName('Planet').rotateZ(0.001);
+        }
     }
 
     function guiOptions(){
