@@ -15,7 +15,6 @@ function loadScene(){
 
 }
 
-
 class ColorGUIHelper {
     constructor(object, prop) {
         this.object = object;
@@ -29,7 +28,6 @@ class ColorGUIHelper {
     }
 }
 
-
 function init(scene){
     const canvas = document.getElementById("gl-canvas");
     canvas.width  = 1024;
@@ -38,7 +36,7 @@ function init(scene){
     const renderer = new THREE.WebGLRenderer({canvas});
     renderer.physicallyCorrectLights = true;
     renderer.shadowMap.enabled = true;
-    //renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+    renderer.shadowMap.type = THREE.BasicShadowMap; //THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
     // const camera = new THREE.PerspectiveCamera( 50, canvas.width / canvas.height, 0.01, 1000);
     // camera.position.set(0,11,3);
