@@ -5,30 +5,25 @@ import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 
-window.onload = init();
+window.addEventListener('resize', onWindowResize);
+window.onload = loadScene();
+
+function onWindowResize() {
+  camera.aspect = width / height;;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height)
+}
 
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene.json'), function (scene) {init(scene)});
+    //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
 }
 
-class ColorGUIHelper {
-    constructor(object, prop) {
-        this.object = object;
-        this.prop = prop;
-    }
-    get value() {
-        return `#${this.object[this.prop].getHexString()}`;
-    }
-    set value(hexString) {
-        this.object[this.prop].set(hexString);
-    }
-}
-
-function init(){
+function init(scene){
     const canvas = document.getElementById("gl-canvas");
     canvas.width  = 1024;
     canvas.height = 576;
@@ -38,31 +33,38 @@ function init(){
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap; //THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-    const scene = new THREE.Scene();
-    let lights;
     const loader = new THREE.ObjectLoader();
 
-    loader.load(('scenes/PlanetSystem.json'), setScene(obj););
-
-    function setScene(obj){
-        scene.add(obj);
-    }
+    // const objects = [
+    //     'scenes/PlanetSystem.json',
+    //     'myModels/Astronaut.json'
+    // ];
+    // objects.forEach((path) => {
+    //     loader.load((path), function(obj){scene.add(obj);
+    //     console.log(obj.name)});
+    // });
 
     // const camera = new THREE.PerspectiveCamera( 50, canvas.width / canvas.height, 0.01, 1000);
     // camera.position.set(0,11,3);
     // camera.rotateX(-0.2);
     // scene.add(camera);
-    //
-    // const light = new THREE.PointLight();
-    // light.position.set(0, 10, 1);
-    // scene.add(light);
-    // scene.getObjectByName("Astronaut").position.set(0,10.5,0)
-
-    const player = new Player(scene.getObjectByName("Astronaut"))
-    document.getElementById("StartButton").onclick = function() {player.move()};
-    document.getElementById("StopButton").onclick = function() {player.reset()};
 
     const camera = scene.getObjectByName("PlayerCam");
+
+    const lights = [
+        scene.getObjectByName("star1Light"),
+        scene.getObjectByName("star2Light"),
+        scene.getObjectByName("lightEye")
+    ];
+
+    const astronaut = scene.getObjectByName("Astronaut");
+    const lightTarget = new THREE.Object3D();
+    astronaut.getObjectByName("Head").add(lightTarget);
+    lightTarget.position.set(0,0.2,1);
+    astronaut.getObjectByName("lightEye").target = lightTarget;
+    const player = new Player(astronaut);
+    // document.getElementById("StartButton").onclick = function() {player.move()};
+    // document.getElementById("StopButton").onclick = function() {player.reset()};
 
     window.addEventListener('keydown', (e) => {
         switch(e.code){
@@ -97,22 +99,8 @@ function init(){
 
     function render(time) {
         requestAnimationFrame(render);
-        if (resizeRendererToDisplaySize(renderer)) {
-            const canvas = renderer.domElement;
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-        }
-        /*
-        orbits(time*0.001);
-        camera.updateProjectionMatrix();
-        var cast = new Array();
-        scene.getObjectByName("PlanetZigarov").raycast(player.ray,cast);
-        //if (cast.length >0) console.log(cast[0].distance.toPrecision(3));
-        player.update(cast[0]);
-        */
-        //clip.Update(time);
         player.update();
-        orbits(time);
+        //orbits();
         renderer.render(scene, camera);
 
     }
@@ -136,16 +124,35 @@ function init(){
         const gui = new GUI();
         const camFolder = gui.addFolder('Camera');
         camFolder.add(camera, 'fov', 30, 120);
-    }
 
-    function resizeRendererToDisplaySize(renderer) {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-        const needResize = canvas.width !== width || canvas.height !== height;
-        if (needResize) {
-            renderer.setSize(width, height, false);
-        }
-        return needResize;
+        const lightsFolder = gui.addFolder("Lights");
+        lights.forEach(light => {
+            const lightFolder = lightsFolder.addFolder(light.name);
+            lightFolder.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+            lightFolder.add(light, 'intensity', 0, 1000);
+            lightFolder.add(light, 'distance', 0, 1000);
+            lightFolder.add(light, 'decay', 0, 2);
+            if (light.name == 'lightEye') {
+                //lightFolder.add(light, 'angle', 0, 1.57);
+                //lightFolder.add(light, 'penumbra', 0, 1);
+                const targetFolder = lightFolder.addFolder("Target");
+                targetFolder.add(lightTarget.position, 'x', 0,10);
+                targetFolder.add(lightTarget.position, 'y', 0,10);
+                targetFolder.add(lightTarget.position, 'z', 0,10);
+            }
+        });
+    }
+}
+
+class ColorGUIHelper {
+    constructor(object, prop) {
+        this.object = object;
+        this.prop = prop;
+    }
+    get value() {
+        return `#${this.object[this.prop].getHexString()}`;
+    }
+    set value(hexString) {
+        this.object[this.prop].set(hexString);
     }
 }
