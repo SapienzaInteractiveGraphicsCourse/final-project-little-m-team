@@ -5,7 +5,7 @@ import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 
-window.onload = loadScene();
+window.onload = init();
 
 function loadScene(){
     THREE.Cache.enabled = false;
@@ -28,7 +28,7 @@ class ColorGUIHelper {
     }
 }
 
-function init(scene){
+function init(){
     const canvas = document.getElementById("gl-canvas");
     canvas.width  = 1024;
     canvas.height = 576;
@@ -37,6 +37,16 @@ function init(scene){
     renderer.physicallyCorrectLights = true;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap; //THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+    const scene = new THREE.Scene();
+    let lights;
+    const loader = new THREE.ObjectLoader();
+
+    loader.load(('scenes/PlanetSystem.json'), setScene(obj););
+
+    function setScene(obj){
+        scene.add(obj);
+    }
 
     // const camera = new THREE.PerspectiveCamera( 50, canvas.width / canvas.height, 0.01, 1000);
     // camera.position.set(0,11,3);
@@ -82,7 +92,7 @@ function init(scene){
         }
     });
 
-    //guiOptions();
+    guiOptions();
     render();
 
     function render(time) {
