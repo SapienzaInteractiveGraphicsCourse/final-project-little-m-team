@@ -1,9 +1,12 @@
-//import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
+import * as THREE from '../resources/three/build/three.module.js';
 import {Data} from "./Data.js"
 
 export class Player {
     joints = [];
     animations = {};
+    spherical = new THREE.Spherical(10.56,0,0);
+    forward = new THREE.Vector3(0,0,-1);
+    beta = 0.0;
 
     constructor(obj){
         this.model = obj;
@@ -25,6 +28,14 @@ export class Player {
     update() {
         for (const [name, clip] of Object.entries(this.animations)) {
             clip.Update();
+        }
+
+        const dphi = 0.01;
+        if (this.moving[0]) {
+            this.spherical.phi -= dphi;
+            this.model.position.setFromSpherical(this.spherical);
+            this.model.lookAt(0,0,0);
+            this.model.rotation.x -= Math.PI/2;
         }
     }
 
