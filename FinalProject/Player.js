@@ -7,6 +7,8 @@ export class Player {
     spherical = new THREE.Spherical(10.56,0,0);
     forward = new THREE.Vector3(0,0,-1);
     beta = 0.0;
+    dphi = 0.0;
+    dtheta = 0.0;
 
     constructor(obj){
         this.model = obj;
@@ -29,13 +31,13 @@ export class Player {
         for (const [name, clip] of Object.entries(this.animations)) {
             clip.Update();
         }
-
-        const dphi = 0.01;
-        if (this.moving[0]) {
-            this.spherical.phi -= dphi;
+        const walk = this.moving;
+        if (walk[0]) {
+            const dphi = 0.0025;
+            this.spherical.radius = this.model.position.y;
+            this.spherical.phi -= this.dphi;
             this.model.position.setFromSpherical(this.spherical);
-            this.model.lookAt(0,0,0);
-            this.model.rotation.x -= Math.PI/2;
+            this.model.rotation.x -= this.dphi;
         }
     }
 
@@ -57,15 +59,23 @@ export class Player {
     set turn(direction){
         if (direction == 'left'){
             this.animations.Walk.direction = -1;
+            console.log(this.animations.Walk.direction)
+            this.dtheta = 0.01;
             //const tween = new TWEEN.Tween(this.model.rotation,this.animations.Walk.group).to({y: 0.1},100).start();
         }
         else if (direction == 'right'){
             this.animations.Walk.direction = 1;
+            this.dtheta = -0.01;
+            console.log(this.animations.Walk.direction)
             //const tween = new TWEEN.Tween(this.model.rotation,this.animations.Walk.group).to({y: -0.1},100).start();
         }
         else if (direction == 'straight'){
             this.animations.Walk.direction = 0;
+            this.dphi = 0.0025;
             //const tween = new TWEEN.Tween(this.model.rotation,this.animations.Walk.group).to({y: 0},100).start();
+        }
+        else if (direction == 'back'){
+            this.dphi = - 0.0025;
         }
     }
 }

@@ -5,14 +5,8 @@ import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 
-window.addEventListener('resize', onWindowResize);
 window.onload = loadScene();
 
-function onWindowResize() {
-  camera.aspect = width / height;;
-  camera.updateProjectionMatrix();
-  renderer.setSize(width, height)
-}
 
 function loadScene(){
     THREE.Cache.enabled = false;
@@ -54,6 +48,7 @@ function init(scene){
     // scene.add(camera);
 
     const camera = scene.getObjectByName("PlayerCam");
+    window.addEventListener('resize', onWindowResize);
 
     const lights = [
         scene.getObjectByName("star1Light"),
@@ -71,13 +66,14 @@ function init(scene){
     astronaut.getObjectByName("Head").add(lightTarget);
     lightTarget.position.set(0,0.2,1);
     astronaut.getObjectByName("lightEye").target = lightTarget;
-    astronaut.lookAt(0,0,0);
-    astronaut.rotation.x -= Math.PI/2;
+    //astronaut.lookAt(0,0,0);
+    //astronaut.rotation.x -= Math.PI/2;
 
     const player = new Player(astronaut);
     window.addEventListener('keydown', (e) => {
         switch(e.code){
             case "KeyW":
+                player.turn = 'straight';
                 player.move();
             break;
             case "KeyA":
@@ -85,6 +81,10 @@ function init(scene){
             break;
             case "KeyD":
                 player.turn = 'right';
+            break;
+            case "KeyS":
+                player.turn = 'back'
+                player.move();
             break;
         }
     });
@@ -99,6 +99,10 @@ function init(scene){
             case "KeyD":
                 player.turn = 'straight';
             break;
+            case "KeyS":
+                player.turn = 'straight';
+                player.reset();
+
         }
     });
 
@@ -182,6 +186,12 @@ function init(scene){
         const itemFolder = gui.addFolder("Items");
         itemFolder.add(spherical, "phi", -Math.PI*0.5, Math.PI*0.5);
         itemFolder.add(spherical, "theta", -Math.PI*0.5, Math.PI*0.5);
+    }
+
+    function onWindowResize() {
+      camera.aspect = width / height;;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height)
     }
 }
 
