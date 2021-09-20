@@ -2,7 +2,6 @@ import * as THREE from '../resources/three/build/three.module.js';
 import {Data} from "./Data.js"
 
 export class Player {
-    joints = [];
     animations = {};
     spherical = new THREE.Spherical(10.56,0,0);
     forward = new THREE.Vector3(0,0,-1);
@@ -14,15 +13,14 @@ export class Player {
         this.model = obj;
         this.name = obj.name;
 
-//      COMPUTE JOINTS:
-        Data[this.name].joints.forEach((item, i) => {
-            if (!i) this.joints.push(obj.getObjectByName(item).position)
-            else this.joints.push(obj.getObjectByName(item).rotation)
-        });
-
 //      COMPUTE ANIMATIONS:
         for (const [name, clip] of Object.entries(Data.Astronaut.animations)) {
-            const animation = new Animation(name, this.joints, clip.frames, clip.periods, clip.repeat);
+            let joints = [];
+            clip.joints.forEach((item, i) => {
+                if (item=='Astronaut') joints.push(obj.getObjectByName(item).position)
+                else joints.push(obj.getObjectByName(item).rotation)
+            });
+            const animation = new Animation(name, joints, clip.frames, clip.periods, clip.repeat);
             this.animations[name] = animation;
         }
     }
