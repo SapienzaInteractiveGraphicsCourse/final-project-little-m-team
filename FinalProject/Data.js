@@ -4,7 +4,7 @@ export const Data = {
     'Astronaut': {
         animations: {
             'Walk': {
-                joints: ['root', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+                joints: ['Astronaut', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames : [
                     [ {y: 10.47}, {y: 10.51}, {y: 10.55}, {y: 10.57},       {y: 10.47}, {y: 10.51}, {y: 10.55}, {y: 10.57}],       // Height
 

@@ -19,9 +19,9 @@ function loadScene(){
 
 function init(scene){
     const canvas = document.getElementById("gl-canvas");
-    canvas.width  = window.innerWidth - window.innerWidth*0.05;
-    canvas.height = window.innerHeight - window.innerHeight*0.05;
-    canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid blue";
+    canvas.width  = window.innerWidth - window.innerWidth*0.1;
+    canvas.height = window.innerHeight - window.innerHeight*0.1;
+    canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
 
     // canvas.width  = 1024;
     // canvas.height = 576;
@@ -48,7 +48,7 @@ function init(scene){
     // scene.add(camera);
 
     const camera = scene.getObjectByName("PlayerCam");
-    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('resize', resize);
 
     const lights = [
         scene.getObjectByName("star1Light"),
@@ -123,9 +123,9 @@ function init(scene){
 
     const object = scene.getObjectByName("Box");
     object.scale.set(0.05,0.05,0.05);
-    let spherical = new THREE.Spherical()
-    //let spherical = new THREE.Spherical(, 15*Math.PI/180, 0);
-    //console.log(spherical.theta)
+    let spherical =
+    object.position.setFromSpherical(new THREE.Spherical(1.02, -0.2, 0));
+    object.lookAt(0,0,0);
 
     guiOptions();
     render();
@@ -134,9 +134,7 @@ function init(scene){
         requestAnimationFrame(render);
         camera.updateProjectionMatrix();
         player.update();
-        //orbits();
-        object.position.setFromSpherical( spherical );
-        object.lookAt(0,0,0);
+        orbits();
         renderer.render(scene, camera);
 
     }
@@ -144,19 +142,6 @@ function init(scene){
     function orbits(t){
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
-        const planet = scene.getObjectByName('Planet');
-        const [moving, direction] = player.moving;
-        //planet.rotateY(0.01*direction);
-        //f.applyAxisAngle( dirY, 0.01*direction );
-        if(moving){
-            //planet.rotateX(0.001)
-            // planet.rotation.x +=(direction * 0.025);
-            //const theta = planet.rotation.x;
-            //console.log(theta)
-            // /let w = new THREE.Vector3(Math.sin(theta),0,-Math.cos(theta));
-        //    planet.rotateOnAxis(f,0.001);
-        }
-
     }
 
     function guiOptions(){
@@ -182,17 +167,16 @@ function init(scene){
                 targetFolder.add(lightTarget.position, 'z', 0,10);
             }
         });
-
-        const itemFolder = gui.addFolder("Items");
-        itemFolder.add(spherical, "phi", -Math.PI*0.5, Math.PI*0.5);
-        itemFolder.add(spherical, "theta", -Math.PI*0.5, Math.PI*0.5);
     }
 
-    function onWindowResize() {
-      camera.aspect = width / height;;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height)
-    }
+    function resize() {
+        var factor = 0.9; // percentage of the screen
+        var w = window.innerWidth * factor;
+        var h = window.innerHeight * factor;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+    };
 }
 
 class ColorGUIHelper {
