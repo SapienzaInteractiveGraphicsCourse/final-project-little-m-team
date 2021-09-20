@@ -146,10 +146,12 @@ function init(scene){
 
     function guiOptions(){
         const gui = new GUI();
-        const playerFolder = gui.addFolder("Astronaut");
-        playerFolder.add(astronaut.rotation, "x", -Math.PI*0.5, Math.PI*0.5);
+        
         const camFolder = gui.addFolder('PlayerCam');
-        camFolder.add(camera, 'fov', 30, 120);
+        camFolder.add(camera, 'fov', 30, 90);
+        camFolder.add(camera.position, 'y', 0, 10);
+        camFolder.add(camera.position, 'z', -5, 5);
+        camFolder.add(camera.rotation, 'x', -Math.PI, -Math.PI/2);
 
         const lightsFolder = gui.addFolder("Lights");
         lights.forEach(light => {
