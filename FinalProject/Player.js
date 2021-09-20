@@ -17,7 +17,7 @@ export class Player {
         for (const [name, clip] of Object.entries(Data.Astronaut.animations)) {
             let joints = [];
             clip.joints.forEach((item, i) => {
-                if (item=='Astronaut') joints.push(obj.getObjectByName(item).position)
+                if (item=='radius') joints.push(this.spherical)
                 else joints.push(obj.getObjectByName(item).rotation)
             });
             const animation = new Animation(name, joints, clip.frames, clip.periods, clip.repeat);
@@ -32,7 +32,7 @@ export class Player {
         const walk = this.moving;
         if (walk[0]) {
             const dphi = 0.0025;
-            this.spherical.radius = this.model.position.y;
+            //this.spherical.radius = this.model.position.y;
             this.spherical.phi -= this.dphi;
             this.model.position.setFromSpherical(this.spherical);
             this.model.rotation.x -= this.dphi;
