@@ -2,7 +2,7 @@ const c = Math.PI/180;
 
 export const Data = {
     'Astronaut': {
-        joints: ['Astronaut', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+        joints: ['Astronaut', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow']
         animations: {
             'Walk': {
                 frames : [
@@ -30,7 +30,13 @@ export const Data = {
                 frames: [[{y: '+0'}], [{x: 0}], [{x: 0}], [{y: 0}], [{x: 0}], [{x: 0}], [{y: 0}], [{x: 0}], [{x: 0}], [{x: 0}], [{x: 0}]],
                 periods: [600],
                 repeat: false
+            },
+            'Jump': {
+                frames: [
+                    [ ]
+                ],
             }
+
         }
     }
 }
