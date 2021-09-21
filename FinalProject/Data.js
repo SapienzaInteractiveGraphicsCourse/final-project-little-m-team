@@ -3,6 +3,27 @@ const c = Math.PI/180;
 export const Data = {
     'Astronaut': {
         animations: {
+            'Reset': {
+                joints: ['radius', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+
+                frames: [
+                    [{radius: 10.56}],
+                    [{x: 0}],
+                    [{x: 0}],
+                    [{y: 0}],
+                    [{x: 0}],
+                    [{x: 0}],
+                    [{y: 0}],
+                    [{x: 0}],
+                    [{x: 0}],
+                    [{x: 0, y: 0}],
+                    [{x: 0, y: 0}]
+                 ],
+
+                periods: [600],
+                repeat: false,
+                delay: false,
+            },
             'nWalk': {
                 joints: ['radius', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames : [
@@ -22,13 +43,14 @@ export const Data = {
                     [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 45*c} ],     // leftShoulder
                     [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ],   // leftElbow
                 ],
-                periods: new Array(8).fill(300),
-                repeat: true
+                periods: new Array(8).fill(500),
+                repeat: true,
+                delay: false
             },
             'Walk': {
                 joints: ['radius', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames : [
-                    [ {radius: '+0.1'}, {radius: '+0.1'}, {radius: '-0.1'}, {radius: '-0.1'},       {radius: '+0.1'}, {radius: '+0.1'}, {radius: '-0.1'}, {radius: '-0.1'}],       // Height
+                    [ {radius: '+0.15'}, {radius: '+0.15'}, {radius: '-0.15'}, {radius: '-0.15'},       {radius: '+0.15'}, {radius: '+0.15'}, {radius: '-0.15'}, {radius: '-0.15'}],       // Height
 
                     [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightHip
                     [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightKnee
@@ -44,24 +66,69 @@ export const Data = {
                     [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 45*c} ],     // leftShoulder
                     [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ],   // leftElbow
                 ],
-                periods: new Array(8).fill(400),
-                repeat: true
-            },
-            'Reset': {
-                joints: ['radius', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+                periods: [200, 400, 400, 200, 200, 400, 400, 200],
+                repeat: true,
+                delay: false,
+                reset: true,
 
-                frames: [[{radius: 10.56}], [{x: 0}], [{x: 0}], [{y: 0}], [{x: 0}], [{x: 0}], [{y: 0}], [{x: 0}], [{x: 0}], [{x: 0}], [{x: 0}]],
-                periods: [600],
-                repeat: false
             },
-            // 'Jump': {
-            //     frames: [
-            //         [ ]
-            //     ],
-            // }
+
+            'Jump': {
+                joints: ['radius', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+                frames: [
+                    [{radius: 10.4}, {radius: 10.56}, {radius: 11.00}],
+                    [{x: 25*c}, {x: 10*c}, {x: 0}],
+                    [{x: -15*c}, {x: 0}, {x: -10*c}],
+
+                    [{x: -55*c}, {x: 15*c}, {x: 0}],
+                    [{x: 80*c}, {x: -15*c}, {x: 90*c}],
+                    [{y: 25*c}, {y: -30*c}, {y: 0}],
+
+                    [{x: -55*c}, {x: 15*c}, {x: 0}],
+                    [{x: 80*c}, {x: -15*c}, {x: 90*c}],
+                    [{y: 25*c}, {y: -30*c}, {y: 0}],
+
+                    [{x: -30*c}, {x: -90*c}, {x: -150*c}],
+                    [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -30*c}],
+
+                    [{x: -30*c}, {x: -90*c}, {x: -120*c}],
+                    [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -45*c}]
+                ],
+
+                periods: [500, 300, 500],
+                repeat: false,
+                delay: [false, 50],
+                reset: true,
+
+            },
+            'TurnRight': {
+                joints: ['root'],
+                frames: [[{y: '-0.2'}]],
+                periods: [50],
+                reset: false,
+            },
+            'TurnLeft': {
+                joints: ['root'],
+                frames: [[{y: '+0.2'}]],
+                periods: [50],
+                reset: false,
+            },
         }
     }
 }
+/*
+    MODIFIED Structure:
+    Name: [
+        [
+            {
+                joint: 'jointName',
+                to: {variable: value},
+                period: t
+            }
+        ]
+    ]
+
+*/
 
 
 // original frames : [

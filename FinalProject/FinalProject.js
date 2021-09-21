@@ -19,8 +19,8 @@ function loadScene(){
 
 function init(scene){
     const canvas = document.getElementById("gl-canvas");
-    canvas.width  = window.innerWidth - window.innerWidth*0.1;
-    canvas.height = window.innerHeight - window.innerHeight*0.1;
+    canvas.width  = window.innerWidth * 0.8;
+    canvas.height = window.innerHeight * 0.8;
     canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
 
     // canvas.width  = 1024;
@@ -70,41 +70,7 @@ function init(scene){
     //astronaut.rotation.x -= Math.PI/2;
 
     const player = new Player(astronaut);
-    window.addEventListener('keydown', (e) => {
-        switch(e.code){
-            case "KeyW":
-                player.turn = 'straight';
-                player.move();
-            break;
-            case "KeyA":
-                player.turn = 'left';
-            break;
-            case "KeyD":
-                player.turn = 'right';
-            break;
-            case "KeyS":
-                player.turn = 'back'
-                player.move();
-            break;
-        }
-    });
-    window.addEventListener('keyup', (e) => {
-        switch(e.code){
-            case "KeyW":
-                player.reset();
-            break;
-            case "KeyA":
-                player.turn = 'straight';
-            break;
-            case "KeyD":
-                player.turn = 'straight';
-            break;
-            case "KeyS":
-                player.turn = 'straight';
-                player.reset();
 
-        }
-    });
 
 
 
@@ -146,7 +112,7 @@ function init(scene){
 
     function guiOptions(){
         const gui = new GUI();
-        
+
         const camFolder = gui.addFolder('PlayerCam');
         camFolder.add(camera, 'fov', 30, 90);
         camFolder.add(camera.position, 'y', 0, 10);
