@@ -20,7 +20,7 @@ export const Data = {
                     [{x: 0, y: 0}]
                  ],
 
-                periods: [600],
+                periods: [500],
                 repeat: false,
                 delay: false,
             },
@@ -68,7 +68,7 @@ export const Data = {
                     [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ],   // leftElbow
                 ],
                 periods: [200, 400, 400, 200, 200, 400, 400, 200],
-                repeat: true,
+                repeat: false,
                 delay: false,
                 reset: true,
 
@@ -77,7 +77,7 @@ export const Data = {
             'Jump': {
                 joints: ['radius', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames: [
-                    [{radius: 10.4}, {radius: 10.56}, {radius: 11.00}],
+                    [{radius: '-0.16'}, {radius: '+0.16'}, {radius: '+1'}],
                     [{x: 25*c}, {x: 10*c}, {x: 0}],
                     [{x: -15*c}, {x: 0}, {x: -10*c}],
 

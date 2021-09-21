@@ -21,50 +21,58 @@ export class Player {
                 if (joint=='radius') joints.push(this.spherical)
                 else joints.push(obj.getObjectByName(joint).rotation)
             });
-            this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.repeat, clip.delay);
+            this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.repeat, clip.delay, clip.reset);
 
             window.addEventListener('keydown', (e) => {
                 switch(e.code){
                     case "KeyW":
                         this.dphi = 0.0025;
-                        this.animations.Walk.Start();
+                        this.animations.Walk.repeat = true;
+                        this.animations.Walk.start();
                     break;
                     case "KeyA":
                         this.dtheta = -0.01;
-                        this.animations.TurnLeft.Start();
+                        this.animations.TurnLeft.start();
                     break;
                     case "KeyD":
                         this.dtheta = 0.01;
-                        this.animations.TurnRight.Start();
+                        this.animations.TurnRight.start();
                     break;
                     case "KeyS":
                         this.dphi = -0.0025;
-                        this.animations.Walk.Start();
+                        this.animations.Walk.start();
                     break;
                     case "KeyJ":
-                        this.animations.Jump.Start();
+                        this.animations.Jump.start();
+                    break;
+                    case "Backspace":
+                        this.animations.Reset.playng = false;
+                        this.animations.Reset.start();
+                    break;
                 }
             });
             window.addEventListener('keyup', (e) => {
                 switch(e.code){
                     case "KeyW":
+                        this.animations.Walk.repeat = false;
+                        this.animations.Walk.stop();
+                        this.reset();
                         this.dphi = 0;
-                        this.animations.Walk.Stop();
                     break;
                     case "KeyA":
                         this.dtheta = 0;
-                        this.animations.TurnLeft.Stop();
-                        this.animations.TurnRight.Start();
+                        this.animations.TurnLeft.stop();
+                        this.animations.TurnRight.start();
                     break;
                     case "KeyD":
                         this.dtheta = 0;
-                        this.animations.TurnRight.Stop();
-                        this.animations.TurnLeft.Start();
+                        this.animations.TurnRight.stop();
+                        this.animations.TurnLeft.start();
                     break;
                     case "KeyS":
                         this.dphi = 0;
-                        this.animations.Walk.Stop();
-                        //this.reset();
+                        this.animations.Walk.stop();
+
                     break;
                 }
             });
@@ -75,21 +83,27 @@ export class Player {
         this.model.position.setFromSpherical(this.spherical);
         this.spherical.phi -= this.dphi;
         this.model.rotation.x -= this.dphi;
-        this.animations.forEach((clip) => {
+
+        for (const [name, clip] of Object.entries(this.animations)) {
+            if (clip.completed){
+                console.log(clip.name)
+                //clip.setTweens();
+                if(clip.reset){
+                    console.log('reset');
+                    this.reset();
+                }
+            clip.completed = false;
+            }
             if (clip.playing){
                 clip.update();
             }
-            if ((clip.completed)&&(clip.reset)){
-                this.reset();
-                clip.completed = false;
-            }
-        });
+        }
     }
 
     reset(){
         this.animations.Reset.playing = false;
-        this.animations.Reset.setTweens();
-        this.animations.Reset.Start();
+        this.animations.Reset.setTweens(this.animations.Reset);
+        this.animations.Reset.start();
         //this.animations.Reset.playing = false;
     }
 
@@ -100,22 +114,24 @@ export class Player {
 }
 
 class Animation{
-    playing = false;
     paused = false;
     completed = false;
     direction = 0;
     group = new TWEEN.Group();
     tweens = [];
-    constructor(name, joints, frames, periods, repeat, delay) {
+    constructor(name, joints, frames, periods, repeat, delay, reset) {
+        this.playing = false;
         this.name = name;
         this.repeat = repeat;
         this.joints = joints;
         this.frames = frames;
         this.periods = periods;
         this.delay = delay;
-        this.setTweens();
+        this.reset = reset;
+        //this.setTweens(this);
     }
-    setTweens(){
+
+    setTweens(clip){
         this.group.removeAll();
         let tweens = [];
         for (let i = 0; i<this.joints.length; i++){
@@ -124,54 +140,62 @@ class Animation{
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
                 if (this.delay){
                     if (this.delay[j]){
-                        console.log('delay[j]')
                         tween.delay(this.delay[j]);
                     }
                 }
 
-                if (j==0) firstTween = tween;
+                if (j==0) {
+                    tween.onComplete(function(){
+                        clip.completed = false;
+                    })
+                    firstTween = tween;
+                }
                 else currentTween.chain(tween);
                 currentTween = tween;
             }
 
-            if (this.repeat) {
-                const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
-                currentTween.chain(tween,firstTween)
-                //currentTween.chain(firstTween);
-            }
-            else {
-                currentTween.onComplete(function () {
-                    console.log('Hola!')
-                    this.completed = true;
-                    this.playing = false;
-                });
-            }
+            // if (this.repeat) {
+            //     const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
+            //     currentTween.onComplete(function() {
+            //         console.log('AMALA');
+            //     })
+            //     currentTween.chain(tween,firstTween)
+            //     //currentTween.chain(firstTween);
+            // }
+            const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
+            currentTween.onComplete(function() {
+                clip.completed = true;
+            })
+            currentTween.chain(tween,firstTween)
+            //currentTween.chain(firstTween);
             tweens.push(firstTween);
         }
 
         this.tweens = tweens;
     }
 
-    Start() {
+    start() {
         if(!this.playing){
+            this.setTweens(this);
             this.tweens.forEach((tween) => {
                 tween.start();
             });
             this.playing = true;
-            this.completed = false;
         }
     }
 
-    Stop() {
+    stop() {
         if(this.playing){
             this.playing = false;
-            this.completed = true;
             this.group.getAll().forEach((tween) => tween.stop());
         }
     }
 
-    Update(time){
+    update(time){
         this.group.update();
+        if ((this.completed)&&(!this.repeat)) {
+            this.stop();
+        }
     }
 }
 
