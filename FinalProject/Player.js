@@ -27,26 +27,21 @@ export class Player {
                 switch(e.code){
                     case "KeyW":
                         this.dphi = 0.0025;
-                        this.playing = 'Walk';
                         this.animations.Walk.Start();
                     break;
                     case "KeyA":
-                        this.playing = 'TurnLeft';
                         this.dtheta = -0.01;
                         this.animations.TurnLeft.Start();
                     break;
                     case "KeyD":
-                        this.playing = 'TurnRight';
                         this.dtheta = 0.01;
                         this.animations.TurnRight.Start();
                     break;
                     case "KeyS":
                         this.dphi = -0.0025;
-                        this.playing = 'Walk';
                         this.animations.Walk.Start();
                     break;
                     case "KeyJ":
-                        this.playing = 'Jump';
                         this.animations.Jump.Start();
                 }
             });
@@ -54,27 +49,22 @@ export class Player {
                 switch(e.code){
                     case "KeyW":
                         this.dphi = 0;
-                        this.playing = false;
-                        this.reset();
+                        this.animations.Walk.Stop();
                     break;
                     case "KeyA":
                         this.dtheta = 0;
                         this.animations.TurnLeft.Stop();
-                        this.playing = 'TurnRight';
                         this.animations.TurnRight.Start();
-                        //this.reset();
                     break;
                     case "KeyD":
                         this.dtheta = 0;
                         this.animations.TurnRight.Stop();
-                        this.playing = 'TurnLeft';
                         this.animations.TurnLeft.Start();
                     break;
                     case "KeyS":
                         this.dphi = 0;
-                        this.playing = false;
                         this.animations.Walk.Stop();
-                        this.reset();
+                        //this.reset();
                     break;
                 }
             });
@@ -83,37 +73,24 @@ export class Player {
 
     update() {
         this.model.position.setFromSpherical(this.spherical);
-        if (this.playing){
-            this.animations[this.playing].Update();
-            if (this.animations[this.playing].completed) {
-                this.animations[this.playing].completed = false;
-                this.reset();
+        this.spherical.phi -= this.dphi;
+        this.model.rotation.x -= this.dphi;
+        this.animations.forEach((clip) => {
+            if (clip.playing){
+                clip.update();
             }
-        }
-        switch(this.playing){
-            case 'Walk':
-                this.spherical.phi -= this.dphi;
-
-                this.model.rotation.x -= this.dphi;
-            break;
-
-            case 'Jump':
-                if (this.animations.Jump.completed) {
-                    this.animations.Jump.playing = false;
-                    this.animations.Jump.completed = false;
-                    this.playing = 'Reset';
-                    this.reset();
-                }
-        }
-
+            if ((clip.completed)&&(clip.reset)){
+                this.reset();
+                clip.completed = false;
+            }
+        });
     }
 
     reset(){
-        this.playing = 'Reset';
         this.animations.Reset.playing = false;
         this.animations.Reset.setTweens();
         this.animations.Reset.Start();
-        this.animations.Reset.playing = false;
+        //this.animations.Reset.playing = false;
     }
 
     get moving(){
@@ -164,11 +141,11 @@ class Animation{
             }
             else {
                 currentTween.onComplete(function () {
+                    console.log('Hola!')
                     this.completed = true;
                     this.playing = false;
                 });
             }
-
             tweens.push(firstTween);
         }
 
@@ -181,6 +158,7 @@ class Animation{
                 tween.start();
             });
             this.playing = true;
+            this.completed = false;
         }
     }
 

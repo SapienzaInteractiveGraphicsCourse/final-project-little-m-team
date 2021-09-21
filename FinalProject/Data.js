@@ -45,7 +45,8 @@ export const Data = {
                 ],
                 periods: new Array(8).fill(500),
                 repeat: true,
-                delay: false
+                delay: false,
+                reset: true,
             },
             'Walk': {
                 joints: ['radius', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
